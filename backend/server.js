@@ -15,7 +15,7 @@ const connectDB = require("./config/db")
 const userRoute = require("./routes/userRoute")
 
 // customer routes import
-const customerRoutes =require("./routes/customerRoutes")
+const customerRoutes =require("./routes/customerRoute")
 
 // express application create chyunnnu back end wrk aavunnath app use chythan    17
 const app = express()
@@ -45,3 +45,6 @@ connectDB()
 app.listen(5000, () => {
     console.log("server running");
 })
+
+
+

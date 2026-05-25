@@ -4,9 +4,15 @@ import './App.css'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
 import Dashboard from './Pages/Dashboard'
-// importing routeprotect
-
 import Customers from './Pages/Customers'
+import Projects from './Pages/Projects'
+import Analytics from './Pages/Analytics'
+import Tasks from './Pages/Tasks'
+import Kanban from './Pages/Kanban'
+import Chat from './Pages/Chat'
+import Team from './Pages/Team'
+import Settings from './Pages/Settings'
+import Notifications from './Pages/Notifications'
 
 function App() {
   return (
@@ -17,9 +23,17 @@ function App() {
 
           <Route path='/' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/dashboard' element={ <Dashboard/>   } />
-          <Route path='/customers' element={   <Customers />} />
-        
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/customers' element={<Customers />} />
+          <Route path='/projects' element={<Projects />} />
+          <Route path='/analytics' element={<Analytics />} />
+          <Route path='/tasks' element={<Tasks />} />
+          <Route path='/kanban' element={<Kanban />} />
+          <Route path='/chat' element={<Chat />} />
+          <Route path='/team' element={<Team />} />
+          <Route path='/settings' element={<Settings />} />
+          <Route path='/notifications' element={<Notifications />} />
+
         </Routes>
 
       </BrowserRouter>

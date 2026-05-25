@@ -1,124 +1,214 @@
-// customer model import cheyunnu
+// customer model import
 const Customer = require("../model/customerModel")
 
 
-// ADD CUSTOMER
 
+// ========================================
+// ADD CUSTOMER
+// ========================================
 const addCustomer = async (req, res) => {
 
     try {
-        // bodyil ninn data edukunnu
-        const {  name, email, phone, location} = req.body
 
-        // email already indo check
-        const existingCustomer =await Customer.findOne({ email })
+        // body il ninn data edukunnu
+        const {
+            name,
+            email,
+            phone,
+            location
+        } = req.body
 
-        // already undenghil
-        if (existingCustomer) { return res.status(400).json({ msg: "customer already exists" })
+
+        // existing customer check
+        const existingCustomer =
+            await Customer.findOne({ email })
+
+
+        // already customer undenghil
+        if (existingCustomer) {
+
+            return res.status(400).json({
+                msg: "customer already exists"
+            })
+
         }
 
+
         // database save
-        const newCustomer = await Customer.create({ name, email,phone,location })
+        const newCustomer =
+            await Customer.create({
+
+                name,
+                email,
+                phone,
+                location
+
+            })
+
 
         // success response
-        res.status(201).json({ msg: "customer added", newCustomer})
+        res.status(201).json({
+
+            msg: "customer added",
+            newCustomer
+
+        })
 
     }
 
-    // error
     catch (err) {
-        res.status(500).json({ msg: "add customer failed"})
+
+        console.log(err)
+
+        res.status(500).json({
+            msg: "add customer failed"
+        })
+
     }
 
 }
 
 
-// GET ALL CUSTOMERS
 
+
+// ========================================
+// GET CUSTOMERS
+// ========================================
 const getCustomers = async (req, res) => {
 
     try {
 
-        // databaseil ninn customers fetch
-        const customers = await Customer.find()
+        // all customers fetch
+        const customers =
+            await Customer.find()
+
 
         // response
-        res.status(200).json({ msg: "all customers", customers})
+        res.status(200).json({
+
+            msg: "all customers",
+            customers
+
+        })
 
     }
 
-    // error
     catch (err) {
 
-        res.status(500).json({ msg: "get customers failed" })
+        console.log(err)
+
+        res.status(500).json({
+            msg: "get customers failed"
+        })
 
     }
 
 }
 
 
-// DELETE CUSTOMER
 
+
+// ========================================
+// DELETE CUSTOMER
+// ========================================
 const deleteCustomer = async (req, res) => {
 
     try {
 
-        // paramsil ninn id edukunnu
+        // id params il ninn edukunnu
         const { id } = req.params
 
-        // customer delete
-        const deletedCustomer = await Customer.findByIdAndDelete(id)
 
-        // customer illeghil
+        // delete customer
+        const deletedCustomer =
+            await Customer.findByIdAndDelete(id)
+
+
+        // customer illenghil
         if (!deletedCustomer) {
 
-            return res.status(404).json({  msg: "customer not found" })
+            return res.status(404).json({
+                msg: "customer not found"
+            })
 
         }
 
+
         // success response
-        res.status(200).json({msg: "customer deleted"})
+        res.status(200).json({
+            msg: "customer deleted"
+        })
 
     }
 
-    // error
     catch (err) {
 
-        res.status(500).json({ msg: "delete customer failed"})
+        console.log(err)
+
+        res.status(500).json({
+            msg: "delete customer failed"
+        })
 
     }
 
 }
 
 
-// UPDATE CUSTOMER
 
+
+// ========================================
+// UPDATE CUSTOMER
+// ========================================
 const updateCustomer = async (req, res) => {
 
     try {
 
-        // paramsil ninn id edukunnu
+        // id params il ninn edukunnu
         const { id } = req.params
 
-        // update cheyunnu
-        const updatedCustomer =await Customer.findByIdAndUpdate( id, req.body, {new: true } )
 
-        // customer illeghil
+        // update customer
+        const updatedCustomer =
+            await Customer.findByIdAndUpdate(
+
+                id,
+
+                req.body,
+
+                {
+                    new: true
+                }
+
+            )
+
+
+        // customer illenghil
         if (!updatedCustomer) {
 
-            return res.status(404).json({ msg: "customer not found" })
+            return res.status(404).json({
+                msg: "customer not found"
+            })
 
         }
 
+
         // success response
-        res.status(200).json({ msg: "customer updated",updatedCustomer })
+        res.status(200).json({
+
+            msg: "customer updated",
+            updatedCustomer
+
+        })
 
     }
 
-    // error
     catch (err) {
 
-        res.status(500).json({ msg: "update customer failed"})
+        console.log(err)
+
+        res.status(500).json({
+            msg: "update customer failed"
+        })
 
     }
 
@@ -126,5 +216,13 @@ const updateCustomer = async (req, res) => {
 
 
 
+
 // export functions
-module.exports = {addCustomer, getCustomers, deleteCustomer, updateCustomer}
+module.exports = {
+
+    addCustomer,
+    getCustomers,
+    deleteCustomer,
+    updateCustomer
+
+}

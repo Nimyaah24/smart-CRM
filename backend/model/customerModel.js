@@ -1,8 +1,11 @@
-// mongoose import cheyunnu
+// mongoose import
 const mongoose = require("mongoose")
 
 
-// customer schema create cheyunnu
+
+// ========================================
+// CUSTOMER SCHEMA
+// ========================================
 const customerSchema = new mongoose.Schema(
 
     {
@@ -13,6 +16,8 @@ const customerSchema = new mongoose.Schema(
             required: true
         },
 
+
+
         // customer email
         email: {
             type: String,
@@ -20,47 +25,68 @@ const customerSchema = new mongoose.Schema(
             unique: true
         },
 
+
+
         // customer phone
         phone: {
             type: String,
             required: true
         },
 
+
+
         // customer company
         company: {
             type: String
         },
 
+
+
         // customer status
         status: {
+
             type: String,
 
-            // default active
             default: "Active"
+
         },
+
+
 
         // customer location
         location: {
             type: String
         },
 
+
+
         // customer image
         image: {
+
             type: String,
 
-            // default profile image
             default:
                 "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+
         }
 
-    },{   timestamps: true}                  // automatic createdAt updatedAt
+    },
+
+    {
+        timestamps: true
+    }
 
 )
 
 
-// collection create cheyunnu
-const Customer = mongoose.model( "customer",customerSchema)
+
+// model create
+const Customer = mongoose.model(
+    "Customer",
+    customerSchema
+)
 
 
-// export cheyunnu
+
+// export
 module.exports = Customer

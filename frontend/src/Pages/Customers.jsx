@@ -1,764 +1,598 @@
+/*
+========================================
+IMPORTS
+========================================
+*/
 
 // react hooks
 import { useEffect, useState } from "react"
 
-// navigation
+// react router
 import { useNavigate } from "react-router-dom"
 
-// darkmode component
+// dark mode component
 import DarkModeToggle from "../components/DarkModeToggle"
 
 // icons
-import { LayoutDashboard, Users, Bell, Search, Plus, Trash2, Pencil, Mail, Phone, MapPin, X, LoaderCircle } from "lucide-react"
+import {
+    Users,
+    Search,
+    Plus,
+    Pencil,
+    Trash2,
+    Mail,
+    Phone,
+    MapPin,
+    ArrowLeft
+} from "lucide-react"
 
-// toastify
-import { toast } from "react-toastify"
-
-// customer api
-import { getCustomers, addCustomer, deleteCustomer, updateCustomer } from "../Api/customerApi"
 
 
-// CUSTOMERS COMPONENT
+/*
+========================================
+CUSTOMERS COMPONENT
+========================================
+*/
+
 const Customers = () => {
 
-    // NAVIGATION
+    /*
+    ========================================
+    NAVIGATION
+    ========================================
+    */
+
     const navigate = useNavigate()
 
-    // DARK MODE
+
+
+    /*
+    ========================================
+    DARK MODE STATE
+    ========================================
+    */
+
     const [darkMode, setDarkMode] = useState(false)
 
-    // LOADING
-    const [loading, setLoading] = useState(false)
 
-    // SEARCH STATE
-    const [search, setSearch] = useState("")
 
-    // CUSTOMER DATA
+    /*
+    ========================================
+    CUSTOMER STATE
+    ========================================
+    */
+
     const [customers, setCustomers] = useState([])
 
-    // MODAL STATE
-    const [showModal, setShowModal] = useState(false)
 
-    // EDIT MODE
+
+    /*
+    ========================================
+    SEARCH STATE
+    ========================================
+    */
+
+    const [search, setSearch] = useState("")
+
+
+
+    /*
+    ========================================
+    FORM STATE
+    ========================================
+    */
+
+    const [form, setForm] = useState({
+
+        name: "",
+        email: "",
+        phone: "",
+        location: ""
+
+    })
+
+
+
+    /*
+    ========================================
+    EDIT ID STATE
+    ========================================
+    */
+
     const [editId, setEditId] = useState(null)
 
-    // FORM STATE
 
-    const [form, setform] = useState({ name: "", email: "", phone: "", location: "" })
 
-    // HANDLE CHANGE
+    /*
+    ========================================
+    FETCH CUSTOMERS
+    ========================================
+    */
 
-    const handlechange = (e) => {
-        setform({
-            ...form,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    // GET CUSTOMERS
     const fetchCustomers = async () => {
 
         try {
-            setLoading(true)
 
-            // backend api call
-            const res = await getCustomers()
-
-            // state update
-            setCustomers(res.customers)
-
-        }
-
-        catch (err) {
-
-            console.log(err)
-            toast.error("failed to load customers")
-
-        }
-
-        finally {
-            setLoading(false)
-        }
-
-    }
-
-    // USE EFFECT
-    useEffect(() => {
-        fetchCustomers()
-    }, [])
-
-
-    // ADD CUSTOMER
-    const handleAddCustomer = async () => {
-
-        try {
-
-            // validation
-            if (!form.name || !form.email || !form.phone || !form.location) {
-                toast.warning("fill all fields")
-                return
-            }
-            setLoading(true)
-
-            // add customer
-            const res = await addCustomer(form)
-
-            // success toast
-            toast.success(res.msg)
-
-            // close modal
-            setShowModal(false)
-
-            // clear form
-            setform({ name: "", email: "", phone: "", location: "" })
-
-            // reload customers
-            fetchCustomers()
-
-        }
-
-        catch (err) {
-
-            console.log(err)
-
-            toast.error("add customer failed")
-
-        }
-
-        finally {
-
-            setLoading(false)
-
-        }
-
-    }
-
-
-    // DELETE CUSTOMER
-    const handleDelete = async (id) => {
-
-        try {
-
-            // confirm
-            const confirmDelete = window.confirm("delete customer ?")
-
-            if (!confirmDelete) {
-                return
-            }
-
-            // delete api
-            const res = await deleteCustomer(id)
-
-            toast.success(res.msg)
-
-            // reload
-            fetchCustomers()
-        }
-
-        catch (err) {
-            console.log(err)
-            toast.error("delete failed")
-        }
-
-    }
-
-
-    // OPEN EDIT
-    const openEditModal = (item) => {
-        // modal open
-        setShowModal(true)
-
-        // edit id set
-        setEditId(item._id)
-
-        // form fill
-        setform({ name: item.name, email: item.email, phone: item.phone, location: item.location })
-
-    }
-
-
-
-    // UPDATE CUSTOMER
-    const handleUpdateCustomer = async () => {
-
-        try {
-            setLoading(true)
-
-            // update api
-            const res = await updateCustomer(editId, form)
-
-            // success toast
-            toast.success(res.msg)
-
-            // close modal
-            setShowModal(false)
-
-            // clear form
-            setform({ name: "", email: "", phone: "", location: "" })
-
-            // clear edit id
-            setEditId(null)
-
-            // reload
-            fetchCustomers()
-
-        }
-
-        catch (err) {
-            console.log(err)
-            toast.error("update failed")
-        }
-        finally {
-            setLoading(false)
-        }
-
-    }
-
-
-    // FILTERED CUSTOMERS
-    const filteredCustomers = customers.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
-
-
-    // LOGOUT
-    const handleLogout = async () => {
-        try {
-            await fetch("http://localhost:5000/api/user/logout",
+            // api call
+            const res = await fetch(
+                "http://localhost:5000/api/customer/get",
                 {
-                    method: "POST",
                     credentials: "include"
                 }
             )
 
-            navigate("/")
+            // response convert json
+            const data = await res.json()
+
+            // store customer data
+            setCustomers(data.customers)
 
         }
 
         catch (err) {
+
             console.log(err)
+
         }
 
     }
+
+
+
+    /*
+    ========================================
+    COMPONENT LOAD
+    ========================================
+    */
+
+    useEffect(() => {
+
+        fetchCustomers()
+
+    }, [])
+
+
+
+    /*
+    ========================================
+    INPUT CHANGE
+    ========================================
+    */
+
+    const handleChange = (e) => {
+
+        setForm({
+
+            ...form,
+
+            [e.target.name]: e.target.value
+
+        })
+
+    }
+
+
+
+    /*
+    ========================================
+    ADD CUSTOMER
+    ========================================
+    */
+
+    const addCustomer = async () => {
+
+        try {
+
+            await fetch(
+                "http://localhost:5000/api/customer/add",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify(form)
+
+                }
+            )
+
+            // refresh customers
+            fetchCustomers()
+
+            // clear form
+            setForm({
+
+                name: "",
+                email: "",
+                phone: "",
+                location: ""
+
+            })
+
+        }
+
+        catch (err) {
+
+            console.log(err)
+
+        }
+
+    }
+
+
+
+    /*
+    ========================================
+    DELETE CUSTOMER
+    ========================================
+    */
+
+    const deleteCustomer = async (id) => {
+
+        try {
+
+            await fetch(
+                `http://localhost:5000/api/customer/delete/${id}`,
+                {
+
+                    method: "DELETE",
+
+                    credentials: "include"
+
+                }
+            )
+
+            // refresh customers
+            fetchCustomers()
+
+        }
+
+        catch (err) {
+
+            console.log(err)
+
+        }
+
+    }
+
+
+
+    /*
+    ========================================
+    EDIT BUTTON CLICK
+    ========================================
+    */
+
+    const editCustomer = (item) => {
+
+        // store edit id
+        setEditId(item._id)
+
+        // set form values
+        setForm({
+
+            name: item.name,
+            email: item.email,
+            phone: item.phone,
+            location: item.location
+
+        })
+
+    }
+
+
+
+    /*
+    ========================================
+    UPDATE CUSTOMER
+    ========================================
+    */
+
+    const updateCustomer = async () => {
+
+        try {
+
+            await fetch(
+                `http://localhost:5000/api/customer/update/${editId}`,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify(form)
+
+                }
+            )
+
+            // refresh customer
+            fetchCustomers()
+
+            // clear form
+            setForm({
+
+                name: "",
+                email: "",
+                phone: "",
+                location: ""
+
+            })
+
+            // remove edit id
+            setEditId(null)
+
+        }
+
+        catch (err) {
+
+            console.log(err)
+
+        }
+
+    }
+
+
+
+    /*
+    ========================================
+    SEARCH FILTER
+    ========================================
+    */
+
+    const filteredCustomers = customers.filter((item) =>
+
+        item.name.toLowerCase().includes(search.toLowerCase())
+
+    )
 
 
 
     return (
 
-        // MAIN CONTAINER
-        <div className="container-fluid" style={{ minHeight: "100vh", background: darkMode ? "#020617" : "#eef2ff", overflow: "hidden" }}  >
+        /*
+        ========================================
+        MAIN CONTAINER
+        ========================================
+        */
 
-            <div className="row">
+        <div
+            className="container-fluid"
+            style={{
 
-                {/* SIDEBAR */}
-                <div className="col-lg-2 p-4 d-none d-lg-block" style={{minHeight: "100vh",  background: darkMode ? "#0f172a"  : "white", borderRight:  darkMode  ? "1px solid #1e293b": "1px solid #e2e8f0"}}  >
+                minHeight: "100vh",
+
+                background: darkMode
+                    ? "#020617"
+                    : "#f1f5f9",
+
+                padding: "30px",
+
+                transition: "0.3s"
+
+            }}
+        >
 
 
-                    {/* logo */}
-                    <h2 className="fw-bold mb-5" style={{color: darkMode ? "white" : "#0f172a" }}>Smart CRM </h2>
+
+            {/*
+            ========================================
+            TOP NAVBAR
+            ========================================
+            */}
+
+            <div
+                className="d-flex justify-content-between align-items-center mb-4 p-4"
+
+                style={{
+
+                    borderRadius: "28px",
+
+                    background: darkMode
+                        ? "rgba(15,23,42,0.9)"
+                        : "rgba(255,255,255,0.9)",
+
+                    backdropFilter: "blur(10px)",
+
+                    boxShadow:
+                        "0 10px 30px rgba(0,0,0,0.08)"
+
+                }}
+            >
 
 
-                    {/* dashboard */}
-                    <button onClick={() => navigate("/dashboard")} className="btn w-100 d-flex align-items-center gap-3 mb-3"  style={{background: darkMode ? "#1e293b": "#f1f5f9", padding: "15px", borderRadius: "16px"}} > <LayoutDashboard size={20} /> Dashboard</button>
+
+                {/* LEFT */}
+                <div className="d-flex align-items-center gap-3">
+
+                    {/* BACK BUTTON */}
+                    <button
+                        onClick={() => navigate("/dashboard")}
+                        className="btn"
+                        style={{
+
+                            width: "50px",
+
+                            height: "50px",
+
+                            borderRadius: "15px",
+
+                            background: darkMode
+                                ? "#1e293b"
+                                : "#e2e8f0"
+
+                        }}
+                    >
+
+                        <ArrowLeft
+                            color={darkMode ? "white" : "#0f172a"}
+                        />
+
+                    </button>
 
 
-                    {/* customer */}
-                    <button className="btn w-100 d-flex align-items-center gap-3 text-white" style={{ background: "linear-gradient(to right,#2563eb,#3b82f6)", padding: "15px",borderRadius: "16px"}}  > <Users size={20} /> Customers   </button>
 
+                    {/* TITLE */}
+                    <div>
 
-                    {/* image */}
-                    <div className="mt-5 text-center">
+                        <h2
+                            className="fw-bold m-0"
 
-                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="admin" style={{  width: "120px"}} />
+                            style={{
 
-                        <h5 className="mt-3" style={{  color: darkMode? "white" : "#0f172a" }} > CRM Admin </h5>
+                                color: darkMode
+                                    ? "white"
+                                    : "#0f172a"
+
+                            }}
+                        >
+
+                            Customers
+
+                        </h2>
+
+                        <p
+                            className="m-0 mt-1"
+
+                            style={{
+
+                                color: darkMode
+                                    ? "#94a3b8"
+                                    : "#64748b"
+
+                            }}
+                        >
+
+                            Manage all your clients
+
+                        </p>
 
                     </div>
 
                 </div>
 
 
-                {/* RIGHT SIDE */}
-        
-                <div className="col-lg-10 p-4">
 
-                    {/* TOP NAVBAR */}
-                    <div className="d-flex justify-content-between align-items-center mb-4" >
+                {/* RIGHT */}
+                <DarkModeToggle
+                    darkMode={darkMode}
+                    setDarkMode={setDarkMode}
+                />
 
-                    {/* left */}
-                        <div>
-                            <h1 className="fw-bold"style={{ color: darkMode ? "white" : "#0f172a" }} > Customer Management</h1>
-
-                            <p style={{  color: darkMode  ? "#94a3b8" : "#64748b" }}>  Manage your business clients professionally</p>
-                        </div>
-
-
-                        {/* right */}
-                        <div className="d-flex align-items-center gap-3">
-
-                            {/* bell */}
-                            <div className="d-flex justify-content-center align-items-center" style={{  width: "50px", height: "50px",  borderRadius: "15px", background:darkMode   ? "#0f172a" : "white" }} > <Bell /> </div>
-
-                            {/* dark mode */}
-                            <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
-
-                            {/* logout */}
-                            <button onClick={handleLogout}  className="btn text-white" style={{  background: "linear-gradient(to right,#ef4444,#dc2626)",  padding:  "12px 25px",  borderRadius:"15px" }} >  Logout </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {/* TOP CARDS */}
-                  
-
-                    <div className="row mb-4">
+            </div>
 
 
 
-                        {/* card */}
-                        <div className="col-md-4 mb-3">
+            {/*
+            ========================================
+            TOP SECTION
+            ========================================
+            */}
 
-                            <div
-                                className="p-4"
-
-                                style={{
-
-                                    borderRadius: "28px",
-
-                                    background:
-                                        darkMode
-                                            ? "#0f172a"
-                                            : "white",
-
-                                    boxShadow:
-                                        "0 10px 40px rgba(0,0,0,0.05)"
-
-                                }}
-                            >
-
-                                <h5>Total Customers</h5>
-
-                                <h1 className="fw-bold">
-
-                                    {customers.length}
-
-                                </h1>
-
-                            </div>
-
-                        </div>
+            <div className="row mb-4">
 
 
 
-                        {/* card */}
-                        <div className="col-md-4 mb-3">
-
-                            <div
-                                className="p-4"
-
-                                style={{
-
-                                    borderRadius: "28px",
-
-                                    background:
-                                        darkMode
-                                            ? "#0f172a"
-                                            : "white"
-
-                                }}
-                            >
-
-                                <h5>Active Clients</h5>
-
-                                <h1 className="fw-bold">
-
-                                    92%
-
-                                </h1>
-
-                            </div>
-
-                        </div>
-
-
-
-                        {/* card */}
-                        <div className="col-md-4 mb-3">
-
-                            <div
-                                className="p-4"
-
-                                style={{
-
-                                    borderRadius: "28px",
-
-                                    background:
-                                        darkMode
-                                            ? "#0f172a"
-                                            : "white"
-
-                                }}
-                            >
-
-                                <h5>Business Growth</h5>
-
-                                <h1 className="fw-bold">
-
-                                    +28%
-
-                                </h1>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    {/*
-                    ========================================
-                    ACTION BAR
-                    ========================================
-                    */}
+                {/* SEARCH */}
+                <div className="col-lg-8 mb-3">
 
                     <div
-                        className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4"
-                    >
-
-
-
-                        {/* search */}
-                        <div
-                            className="d-flex align-items-center px-3"
-
-                            style={{
-
-                                width: "350px",
-
-                                height: "60px",
-
-                                borderRadius: "18px",
-
-                                background:
-                                    darkMode
-                                        ? "#0f172a"
-                                        : "white"
-
-                            }}
-                        >
-
-                            <Search />
-
-
-
-                            <input
-
-                                type="text"
-
-                                placeholder="Search customers..."
-
-                                value={search}
-
-                                onChange={(e) =>
-                                    setSearch(e.target.value)
-                                }
-
-                                className="form-control border-0 shadow-none"
-
-                                style={{
-
-                                    background:
-                                        "transparent"
-
-                                }}
-                            />
-
-                        </div>
-
-
-
-                        {/* add button */}
-                        <button
-
-                            onClick={() => {
-
-                                setShowModal(true)
-
-                                setEditId(null)
-
-                                setform({
-
-                                    name: "",
-                                    email: "",
-                                    phone: "",
-                                    location: ""
-
-                                })
-
-                            }}
-
-                            className="btn text-white d-flex align-items-center gap-2"
-
-                            style={{
-
-                                background:
-                                    "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                                borderRadius:
-                                    "18px",
-
-                                padding:
-                                    "15px 25px"
-
-                            }}
-                        >
-
-                            <Plus size={20} />
-
-                            Add Customer
-
-                        </button>
-
-                    </div>
-
-
-
-                    {/*
-                    ========================================
-                    TABLE
-                    ========================================
-                    */}
-
-                    <div
-                        className="table-responsive p-4"
+                        className="d-flex align-items-center px-4"
 
                         style={{
 
-                            borderRadius: "30px",
+                            height: "70px",
 
-                            background:
-                                darkMode
-                                    ? "#0f172a"
-                                    : "white"
+                            borderRadius: "22px",
+
+                            background: darkMode
+                                ? "#0f172a"
+                                : "white",
+
+                            boxShadow:
+                                "0 10px 30px rgba(0,0,0,0.08)"
 
                         }}
                     >
 
+                        <Search
+                            color="#64748b"
+                        />
 
 
-                        {/* loading */}
-                        {
 
-                            loading ? (
+                        <input
+                            type="text"
 
-                                <div className="text-center p-5">
+                            placeholder="Search customer..."
 
-                                    <LoaderCircle
-                                        className="spin"
-                                        size={45}
-                                    />
+                            className="form-control border-0 shadow-none ms-3"
 
-                                </div>
+                            value={search}
 
-                            )
+                            onChange={(e) =>
+                                setSearch(e.target.value)
+                            }
 
-                                :
+                            style={{
 
-                                (
+                                background: "transparent",
 
-                                    <table className="table align-middle">
+                                color: darkMode
+                                    ? "white"
+                                    : "#0f172a"
 
-                                        <thead>
+                            }}
+                        />
 
-                                            <tr>
+                    </div>
 
-                                                <th>User</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
-                                                <th>Location</th>
-                                                <th>Actions</th>
+                </div>
 
-                                            </tr>
 
-                                        </thead>
 
+                {/* TOTAL CARD */}
+                <div className="col-lg-4 mb-3">
 
+                    <div
+                        className="p-3 d-flex justify-content-between align-items-center"
 
-                                        <tbody>
+                        style={{
 
-                                            {
+                            borderRadius: "22px",
 
-                                                filteredCustomers.length > 0 ?
+                            background:
+                                "linear-gradient(to right,#2563eb,#3b82f6)",
 
-                                                    (
+                            color: "white",
 
-                                                        filteredCustomers.map((item) => (
+                            height: "70px"
 
-                                                            <tr key={item._id}>
+                        }}
+                    >
 
+                        <div>
 
+                            <p className="m-0">
+                                Total Customers
+                            </p>
 
-                                                                {/* user */}
-                                                                <td>
+                            <h3 className="fw-bold">
+                                {customers.length}
+                            </h3>
 
-                                                                    <div className="d-flex align-items-center gap-3">
+                        </div>
 
-                                                                        <img
 
-                                                                            src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png"
 
-                                                                            alt="user"
-
-                                                                            style={{
-
-                                                                                width: "50px",
-
-                                                                                height: "50px",
-
-                                                                                borderRadius: "50%"
-
-                                                                            }}
-                                                                        />
-
-
-
-                                                                        <div>
-
-                                                                            <h6 className="m-0">
-
-                                                                                {item.name}
-
-                                                                            </h6>
-
-                                                                            <small>
-
-                                                                                Customer
-
-                                                                            </small>
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                </td>
-
-
-
-                                                                {/* email */}
-                                                                <td>
-
-                                                                    <Mail size={16} />
-
-                                                                    {" "}
-
-                                                                    {item.email}
-
-                                                                </td>
-
-
-
-                                                                {/* phone */}
-                                                                <td>
-
-                                                                    <Phone size={16} />
-
-                                                                    {" "}
-
-                                                                    {item.phone}
-
-                                                                </td>
-
-
-
-                                                                {/* location */}
-                                                                <td>
-
-                                                                    <MapPin size={16} />
-
-                                                                    {" "}
-
-                                                                    {item.location}
-
-                                                                </td>
-
-
-
-                                                                {/* actions */}
-                                                                <td>
-
-                                                                    <div className="d-flex gap-2">
-
-
-
-                                                                        {/* edit */}
-                                                                        <button
-
-                                                                            onClick={() =>
-                                                                                openEditModal(item)
-                                                                            }
-
-                                                                            className="btn btn-warning"
-                                                                        >
-
-                                                                            <Pencil size={18} />
-
-                                                                        </button>
-
-
-
-                                                                        {/* delete */}
-                                                                        <button
-
-                                                                            onClick={() =>
-                                                                                handleDelete(item._id)
-                                                                            }
-
-                                                                            className="btn btn-danger"
-                                                                        >
-
-                                                                            <Trash2 size={18} />
-
-                                                                        </button>
-
-                                                                    </div>
-
-                                                                </td>
-
-                                                            </tr>
-
-                                                        ))
-
-                                                    )
-
-                                                    :
-
-                                                    (
-
-                                                        <tr>
-
-                                                            <td
-                                                                colSpan="5"
-                                                                className="text-center p-5"
-                                                            >
-
-                                                                No Customers Found
-
-                                                            </td>
-
-                                                        </tr>
-
-                                                    )
-
-                                            }
-
-                                        </tbody>
-
-                                    </table>
-
-                                )
-
-                        }
+                        <Users size={40} />
 
                     </div>
 
@@ -767,57 +601,448 @@ const Customers = () => {
             </div>
 
 
-            {/* MODAL */}
-          
-            {
-                showModal && (
-                    <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ background:"rgba(0,0,0,0.5)",zIndex: "999" }} >
 
-                        <div className="p-4" style={{ width: "450px", borderRadius: "30px",background:  darkMode   ? "#0f172a": "white" }} >
+            {/*
+            ========================================
+            ADD CUSTOMER FORM
+            ========================================
+            */}
+
+            <div
+                className="p-4 mb-4"
+
+                style={{
+
+                    borderRadius: "28px",
+
+                    background: darkMode
+                        ? "#0f172a"
+                        : "white",
+
+                    boxShadow:
+                        "0 10px 30px rgba(0,0,0,0.08)"
+
+                }}
+            >
+
+                <h4
+                    className="fw-bold mb-4"
+
+                    style={{
+
+                        color: darkMode
+                            ? "white"
+                            : "#0f172a"
+
+                    }}
+                >
+
+                    {editId
+                        ? "Update Customer"
+                        : "Add Customer"}
+
+                </h4>
 
 
-                            {/* top */}
-                            <div className="d-flex justify-content-between align-items-center mb-4">
 
-                                <h3>
-                                    {
-                                        editId ? "Edit Customer": "Add Customer"
-                                    }
+                <div className="row">
 
-                                </h3>
+                    {/* NAME */}
+                    <div className="col-md-3 mb-3">
 
-                                <button onClick={() =>  setShowModal(false)  }className="btn btn-light" > <X /></button>
+                        <input
+                            type="text"
+
+                            placeholder="Customer Name"
+
+                            className="form-control"
+
+                            name="name"
+
+                            value={form.name}
+
+                            onChange={handleChange}
+
+                            style={{
+
+                                height: "55px",
+
+                                borderRadius: "16px"
+
+                            }}
+                        />
+
+                    </div>
+
+
+
+                    {/* EMAIL */}
+                    <div className="col-md-3 mb-3">
+
+                        <input
+                            type="email"
+
+                            placeholder="Email"
+
+                            className="form-control"
+
+                            name="email"
+
+                            value={form.email}
+
+                            onChange={handleChange}
+
+                            style={{
+
+                                height: "55px",
+
+                                borderRadius: "16px"
+
+                            }}
+                        />
+
+                    </div>
+
+
+
+                    {/* PHONE */}
+                    <div className="col-md-3 mb-3">
+
+                        <input
+                            type="text"
+
+                            placeholder="Phone"
+
+                            className="form-control"
+
+                            name="phone"
+
+                            value={form.phone}
+
+                            onChange={handleChange}
+
+                            style={{
+
+                                height: "55px",
+
+                                borderRadius: "16px"
+
+                            }}
+                        />
+
+                    </div>
+
+
+
+                    {/* LOCATION */}
+                    <div className="col-md-3 mb-3">
+
+                        <input
+                            type="text"
+
+                            placeholder="Location"
+
+                            className="form-control"
+
+                            name="location"
+
+                            value={form.location}
+
+                            onChange={handleChange}
+
+                            style={{
+
+                                height: "55px",
+
+                                borderRadius: "16px"
+
+                            }}
+                        />
+
+                    </div>
+
+                </div>
+
+
+
+                {/* BUTTON */}
+                <button
+                    onClick={
+                        editId
+                            ? updateCustomer
+                            : addCustomer
+                    }
+
+                    className="btn px-4 py-3 mt-2"
+
+                    style={{
+
+                        borderRadius: "16px",
+
+                        background:
+                            "linear-gradient(to right,#0f172a,#1e293b)",
+
+                        color: "white",
+
+                        border: "none",
+
+                        fontWeight: "600"
+
+                    }}
+                >
+
+                    <Plus size={18} className="me-2" />
+
+                    {editId
+                        ? "Update Customer"
+                        : "Add Customer"}
+
+                </button>
+
+            </div>
+
+
+
+            {/*
+            ========================================
+            CUSTOMER CARDS
+            ========================================
+            */}
+
+            <div className="row">
+
+                {filteredCustomers.map((item) => (
+
+                    <div
+                        className="col-lg-4 mb-4"
+                        key={item._id}
+                    >
+
+                        <div
+                            className="p-4 h-100"
+
+                            style={{
+
+                                borderRadius: "28px",
+
+                                background: darkMode
+                                    ? "#0f172a"
+                                    : "white",
+
+                                boxShadow:
+                                    "0 10px 30px rgba(0,0,0,0.08)"
+
+                            }}
+                        >
+
+
+
+                            {/* TOP */}
+                            <div className="d-flex align-items-center justify-content-between">
+
+                                {/* AVATAR */}
+                                <div
+                                    className="d-flex justify-content-center align-items-center"
+
+                                    style={{
+
+                                        width: "70px",
+
+                                        height: "70px",
+
+                                        borderRadius: "50%",
+
+                                        background:
+                                            "linear-gradient(to right,#2563eb,#3b82f6)",
+
+                                        color: "white",
+
+                                        fontSize: "28px",
+
+                                        fontWeight: "700"
+
+                                    }}
+                                >
+
+                                    {item.name.charAt(0)}
+
+                                </div>
+
+
+
+                                {/* ACTIONS */}
+                                <div className="d-flex gap-2">
+
+                                    {/* EDIT */}
+                                    <button
+                                        onClick={() =>
+                                            editCustomer(item)
+                                        }
+
+                                        className="btn"
+
+                                        style={{
+
+                                            width: "45px",
+
+                                            height: "45px",
+
+                                            borderRadius: "14px",
+
+                                            background: "#22c55e",
+
+                                            color: "white"
+
+                                        }}
+                                    >
+
+                                        <Pencil size={18} />
+
+                                    </button>
+
+
+
+                                    {/* DELETE */}
+                                    <button
+                                        onClick={() =>
+                                            deleteCustomer(item._id)
+                                        }
+
+                                        className="btn"
+
+                                        style={{
+
+                                            width: "45px",
+
+                                            height: "45px",
+
+                                            borderRadius: "14px",
+
+                                            background: "#ef4444",
+
+                                            color: "white"
+
+                                        }}
+                                    >
+
+                                        <Trash2 size={18} />
+
+                                    </button>
+
+                                </div>
 
                             </div>
 
 
-                            {/* name */}
-                            <input type="text" name="name" value={form.name} onChange={handlechange}  placeholder="Name" className="form-control mb-3 p-3" />
+
+                            {/* NAME */}
+                            <h3
+                                className="fw-bold mt-4"
+
+                                style={{
+
+                                    color: darkMode
+                                        ? "white"
+                                        : "#0f172a"
+
+                                }}
+                            >
+
+                                {item.name}
+
+                            </h3>
 
 
-                            {/* email */}
-                            <input  type="email" name="email" value={form.email} onChange={handlechange} placeholder="Email"className="form-control mb-3 p-3" />
+
+                            {/* EMAIL */}
+                            <div className="d-flex align-items-center gap-2 mt-3">
+
+                                <Mail
+                                    size={18}
+                                    color="#64748b"
+                                />
+
+                                <p
+                                    className="m-0"
+
+                                    style={{
+
+                                        color: darkMode
+                                            ? "#cbd5e1"
+                                            : "#334155"
+
+                                    }}
+                                >
+
+                                    {item.email}
+
+                                </p>
+
+                            </div>
 
 
-                            {/* phone */}
-                            <input type="text" name="phone"  value={form.phone} onChange={handlechange}  placeholder="Phone" className="form-control mb-3 p-3"/>
+
+                            {/* PHONE */}
+                            <div className="d-flex align-items-center gap-2 mt-3">
+
+                                <Phone
+                                    size={18}
+                                    color="#64748b"
+                                />
+
+                                <p
+                                    className="m-0"
+
+                                    style={{
+
+                                        color: darkMode
+                                            ? "#cbd5e1"
+                                            : "#334155"
+
+                                    }}
+                                >
+
+                                    {item.phone}
+
+                                </p>
+
+                            </div>
 
 
-                            {/* location */}
-                            <input type="text" name="location" value={form.location} onChange={handlechange} placeholder="Location" className="form-control mb-4 p-3" />
 
+                            {/* LOCATION */}
+                            <div className="d-flex align-items-center gap-2 mt-3">
 
-                            {/* button */}
-                            <button onClick={editId ? handleUpdateCustomer: handleAddCustomer } className="btn w-100 text-white" style={{background:"linear-gradient(to right,#2563eb,#3b82f6)", borderRadius:"15px",padding:"14px" }} >
-                                { editId ? "Update Customer": "Add Customer" }
-                            </button>
+                                <MapPin
+                                    size={18}
+                                    color="#64748b"
+                                />
+
+                                <p
+                                    className="m-0"
+
+                                    style={{
+
+                                        color: darkMode
+                                            ? "#cbd5e1"
+                                            : "#334155"
+
+                                    }}
+                                >
+
+                                    {item.location}
+
+                                </p>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                )
-            }
+                ))}
+
+            </div>
 
         </div>
 
