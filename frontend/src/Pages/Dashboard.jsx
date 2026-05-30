@@ -1,68 +1,27 @@
 // IMPORTS
 
-// react hooks
 import { useState } from "react"
-
-// route navigation
 import { useNavigate } from "react-router-dom"
 
-// dark mode component
 import DarkModeToggle from "../components/DarkModeToggle"
+import Sidebar from "../Components/Sidebar"
 
-// icons
 import {
-    LayoutDashboard,
-    Users,
-    FolderKanban,
-    Clock3,
-    TrendingUp,
     Bell,
-    Activity,
     Search,
-    Settings,
-    LogOut,
-    ArrowUpRight,
-    CheckCircle2
-}
-from "lucide-react"
-
-
-
-// DASHBOARD COMPONENT
+    LogOut
+} from "lucide-react"
 
 const Dashboard = () => {
 
-    /*
-    =========================================
-    NAVIGATION
-    =========================================
-    */
-
     const navigate = useNavigate()
 
-
-
-    /*
-    =========================================
-    DARK MODE STATE
-    =========================================
-    */
-
     const [darkMode, setDarkMode] = useState(false)
-
-
-
-    /*
-    =========================================
-    LOGOUT FUNCTION
-    =========================================
-    */
 
     const handleLogout = async () => {
 
         try {
 
-            // backend logout api
             await fetch(
                 "http://localhost:5000/api/user/logout",
                 {
@@ -71,7 +30,6 @@ const Dashboard = () => {
                 }
             )
 
-            // login page redirect
             navigate("/")
 
         }
@@ -84,681 +42,29 @@ const Dashboard = () => {
 
     }
 
-
-
     return (
-
-        /*
-        =========================================
-        MAIN CONTAINER
-        =========================================
-        */
 
         <div
             className="d-flex"
-
             style={{
-
                 minHeight: "100vh",
-
                 background:
                     darkMode
                         ? "#020617"
                         : "#f1f5f9"
-
             }}
         >
 
-
-
-            {/*
-            =========================================
-            SIDEBAR
-            =========================================
-            */}
-
-            <div
-                style={{
-
-                    width: "280px",
-
-                    minHeight: "100vh",
-
-                    background:
-                        darkMode
-                            ? "#0f172a"
-                            : "white",
-
-                    padding: "25px",
-
-                    borderRight:
-                        darkMode
-                            ? "1px solid #1e293b"
-                            : "1px solid #e2e8f0",
-
-                    position: "sticky",
-
-                    top: "0"
-
-                }}
-            >
-
-                {/* LOGO SECTION */}
-
-                <div className="d-flex align-items-center gap-3 mb-5">
-
-                    <div
-                        className="d-flex justify-content-center align-items-center"
-
-                        style={{
-
-                            width: "60px",
-
-                            height: "60px",
-
-                            borderRadius: "20px",
-
-                            background:
-                                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                            boxShadow:
-                                "0 10px 25px rgba(37,99,235,0.4)"
-
-                        }}
-                    >
-
-                        <LayoutDashboard
-                            color="white"
-                            size={30}
-                        />
-
-                    </div>
-
-
-
-                    <div>
-
-                        <h3
-                            className="fw-bold m-0"
-
-                            style={{
-                                color:
-                                    darkMode
-                                        ? "white"
-                                        : "#0f172a"
-                            }}
-                        >
-
-                            Smart CRM
-
-                        </h3>
-
-                        <p
-                            className="m-0"
-
-                            style={{
-                                color: "#64748b"
-                            }}
-                        >
-
-                            Business Dashboard
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* MENU TITLE */}
-
-                <p
-                    className="fw-bold text-uppercase"
-
-                    style={{
-
-                        color: "#64748b",
-
-                        fontSize: "13px",
-
-                        letterSpacing: "1px"
-
-                    }}
-                >
-
-                    Main Menu
-
-                </p>
-
-
-
-                {/* MENU ITEMS */}
-
-                <div className="d-flex flex-column gap-3 mt-3">
-
-                    {/* DASHBOARD */}
-
-                    <button
-                        className="btn text-start d-flex align-items-center justify-content-between"
-
-                        style={{
-
-                            background:
-                                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                            color: "white",
-
-                            padding: "16px",
-
-                            borderRadius: "20px",
-
-                            border: "none",
-
-                            fontWeight: "600",
-
-                            boxShadow:
-                                "0 10px 25px rgba(37,99,235,0.3)"
-
-                        }}
-                    >
-
-                        <div className="d-flex align-items-center gap-3">
-
-                            <LayoutDashboard size={20} />
-
-                            Dashboard
-
-                        </div>
-
-                        <ArrowUpRight size={18} />
-
-                    </button>
-
-
-
-                    {/* CUSTOMERS */}
-
-                    <button
-                        onClick={() => navigate("/customers")}
-
-                        className="btn text-start d-flex align-items-center justify-content-between"
-
-                        style={{
-
-                            background:
-                                darkMode
-                                    ? "#1e293b"
-                                    : "#f8fafc",
-
-                            color:
-                                darkMode
-                                    ? "white"
-                                    : "#0f172a",
-
-                            padding: "16px",
-
-                            borderRadius: "20px",
-
-                            border: "none",
-
-                            fontWeight: "600"
-
-                        }}
-                    >
-
-                        <div className="d-flex align-items-center gap-3">
-
-                            <Users size={20} />
-
-                            Customers
-
-                        </div>
-
-                        <span
-                            style={{
-
-                                background:
-                                    "linear-gradient(to right,#22c55e,#16a34a)",
-
-                                color: "white",
-
-                                padding: "4px 10px",
-
-                                borderRadius: "20px",
-
-                                fontSize: "12px"
-
-                            }}
-                        >
-
-                            120
-
-                        </span>
-
-                    </button>
-
-
-
-                  {/* PROJECTS */}
-
-<button
-
-    onClick={() => navigate("/projects")}
-
-    className="btn text-start d-flex align-items-center gap-3"
-
-    style={{
-
-        background:
-            darkMode
-                ? "#1e293b"
-                : "#f8fafc",
-
-        color:
-            darkMode
-                ? "white"
-                : "#0f172a",
-
-        padding: "16px",
-
-        borderRadius: "20px",
-
-        border: "none",
-
-        fontWeight: "600"
-
-    }}
->
-
-    <FolderKanban size={20} />
-
-    Projects
-
-</button>
-
-
-{/* ANALYTICS */}
-
-<button
-
-    onClick={() => navigate("/analytics")}
-
-    className="btn text-start d-flex align-items-center gap-3"
-
-    style={{
-
-        background:
-            darkMode
-                ? "#1e293b"
-                : "#f8fafc",
-
-        color:
-            darkMode
-                ? "white"
-                : "#0f172a",
-
-        padding: "16px",
-
-        borderRadius: "20px",
-
-        border: "none",
-
-        fontWeight: "600"
-
-    }}
->
-
-    <TrendingUp size={20} />
-
-    Analytics
-
-</button>
-
-
-{/* TASKS */}
-
-<button
-
-    onClick={() => navigate("/tasks")}
-
-    className="btn text-start d-flex align-items-center gap-3"
-
-    style={{
-
-        background:
-            darkMode
-                ? "#1e293b"
-                : "#f8fafc",
-
-        color:
-            darkMode
-                ? "white"
-                : "#0f172a",
-
-        padding: "16px",
-
-        borderRadius: "20px",
-
-        border: "none",
-
-        fontWeight: "600"
-
-    }}
->
-
-    <Clock3 size={20} />
-
-    Tasks
-
-</button>
-
-
-{/* KANBAN */}
-
-<button
-
-    onClick={() => navigate("/kanban")}
-
-    className="btn text-start d-flex align-items-center gap-3"
-
-    style={{
-
-        background:
-            darkMode
-                ? "#1e293b"
-                : "#f8fafc",
-
-        color:
-            darkMode
-                ? "white"
-                : "#0f172a",
-
-        padding: "16px",
-
-        borderRadius: "20px",
-
-        border: "none",
-
-        fontWeight: "600"
-
-    }}
->
-
-    <FolderKanban size={20} />
-
-    Kanban
-
-</button>
-
-
-{/* TEAM CHAT */}
-
-<button
-
-    onClick={() => navigate("/chat")}
-
-    className="btn text-start d-flex align-items-center gap-3"
-
-    style={{
-
-        background:
-            darkMode
-                ? "#1e293b"
-                : "#f8fafc",
-
-        color:
-            darkMode
-                ? "white"
-                : "#0f172a",
-
-        padding: "16px",
-
-        borderRadius: "20px",
-
-        border: "none",
-
-        fontWeight: "600"
-
-    }}
->
-
-    <Users size={20} />
-
-    Team Chat
-
-</button>
-                 
-
-              {/* SETTINGS */}
-{/* SETTINGS */}
-<button
-
-    onClick={() => navigate("/settings")}
-
-    className="btn text-start d-flex align-items-center gap-3"
-
-    style={{
-
-        background:
-            darkMode
-                ? "#1e293b"
-                : "#f8fafc",
-
-        color:
-            darkMode
-                ? "white"
-                : "#0f172a",
-
-        padding: "15px",
-
-        borderRadius: "18px",
-
-        border: "none",
-
-        fontWeight: "600"
-
-    }}
-
->
-
-    <Settings size={20} />
-
-    Settings
-
-</button>
-                </div>
-
-
-
-                {/* ANALYTICS CARD */}
-
-                <div
-                    className="mt-5 p-4"
-
-                    style={{
-
-                        borderRadius: "30px",
-
-                        background:
-                            "linear-gradient(to right,#0f172a,#1e293b)",
-
-                        position: "relative",
-
-                        overflow: "hidden"
-
-                    }}
-                >
-
-                    {/* BACKGROUND CIRCLE */}
-
-                    <div
-                        style={{
-
-                            position: "absolute",
-
-                            width: "150px",
-
-                            height: "150px",
-
-                            borderRadius: "50%",
-
-                            background:
-                                "rgba(255,255,255,0.05)",
-
-                            top: "-50px",
-
-                            right: "-50px"
-
-                        }}
-                    />
-
-
-
-                    <h5
-                        className="fw-bold position-relative"
-
-                        style={{
-                            color: "white"
-                        }}
-                    >
-
-                        Premium Analytics 🚀
-
-                    </h5>
-
-
-
-                    <p
-                        className="position-relative"
-
-                        style={{
-
-                            color: "#cbd5e1",
-
-                            fontSize: "14px",
-
-                            lineHeight: "25px"
-
-                        }}
-                    >
-
-                        Unlock advanced CRM reports,
-                        customer insights and business analytics.
-
-                    </p>
-
-
-
-                    <button
-                        className="btn w-100 mt-3"
-
-                        style={{
-
-                            background: "white",
-
-                            color: "#0f172a",
-
-                            borderRadius: "16px",
-
-                            fontWeight: "700",
-
-                            border: "none",
-
-                            height: "50px"
-
-                        }}
-                    >
-
-                        Upgrade Now
-
-                    </button>
-
-                </div>
-
-
-
-                {/* PROFILE SECTION */}
-
-                <div
-                    className="mt-4 p-3 d-flex align-items-center gap-3"
-
-                    style={{
-
-                        borderRadius: "22px",
-
-                        background:
-                            darkMode
-                                ? "#1e293b"
-                                : "#f8fafc"
-
-                    }}
-                >
-
-                    <img
-                        src="https://i.pravatar.cc/150?img=12"
-
-                        alt="profile"
-
-                        style={{
-
-                            width: "55px",
-
-                            height: "55px",
-
-                            borderRadius: "50%"
-
-                        }}
-                    />
-
-
-
-                    <div>
-
-                        <h6
-                            className="fw-bold m-0"
-
-                            style={{
-
-                                color:
-                                    darkMode
-                                        ? "white"
-                                        : "#0f172a"
-
-                            }}
-                        >
-
-                            Admin User
-
-                        </h6>
-
-                        <p
-                            className="m-0"
-
-                            style={{
-
-                                color: "#64748b",
-
-                                fontSize: "13px"
-
-                            }}
-                        >
-
-                            Super Administrator
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
+            {/* SIDEBAR COMPONENT */}
+            <Sidebar darkMode={darkMode} />
 
             {/* RIGHT CONTENT */}
-
-            <div className="flex-grow-1 p-4">
+            <div
+                className="flex-grow-1 p-4"
+                style={{
+                    marginLeft: "315px"
+                }}
+            >
 
                 {/* TOP NAVBAR */}
 
@@ -768,40 +74,27 @@ const Dashboard = () => {
 
                     <div
                         className="position-relative"
-
                         style={{ width: "350px" }}
                     >
 
                         <Search
                             size={18}
-
                             style={{
-
                                 position: "absolute",
-
                                 top: "16px",
-
                                 left: "15px",
-
                                 color: "#64748b"
-
                             }}
                         />
 
-
-
                         <input
                             type="text"
-
                             placeholder="Search..."
-
                             className="form-control border-0"
-
                             style={{
-
                                 background:
                                     darkMode
-                                        ? "#0f172a"
+                                        ? "#e9edf7"
                                         : "white",
 
                                 color:
@@ -816,48 +109,33 @@ const Dashboard = () => {
 
                                 boxShadow:
                                     "0 10px 30px rgba(0,0,0,0.08)"
-
                             }}
                         />
 
                     </div>
 
-
-
                     {/* RIGHT SIDE */}
 
                     <div className="d-flex align-items-center gap-3">
-
-                        {/* DARK MODE */}
 
                         <DarkModeToggle
                             darkMode={darkMode}
                             setDarkMode={setDarkMode}
                         />
 
-
-
-                        {/* NOTIFICATION */}
-
                         <div
                             className="d-flex justify-content-center align-items-center"
-
                             style={{
-
                                 width: "50px",
-
                                 height: "50px",
-
                                 borderRadius: "16px",
-
                                 background:
                                     darkMode
-                                        ? "#0f172a"
+                                        ? "#dae1f3"
                                         : "white",
 
                                 boxShadow:
                                     "0 10px 30px rgba(0,0,0,0.08)"
-
                             }}
                         >
 
@@ -872,40 +150,628 @@ const Dashboard = () => {
 
                         </div>
 
-
-
-                        {/* LOGOUT */}
-
-                        <button
-                            onClick={handleLogout}
-
-                            className="btn"
-
-                            style={{
-
-                                width: "50px",
-
-                                height: "50px",
-
-                                borderRadius: "16px",
-
-                                background:
-                                    "linear-gradient(to right,#dc2626,#ef4444)",
-
-                                color: "white",
-
-                                border: "none"
-
-                            }}
-                        >
-
-                            <LogOut size={20} />
-
-                        </button>
+                       
 
                     </div>
 
                 </div>
+
+                {/* NINTE DASHBOARD CONTENT IVIDE VEKKUKA */}
+{/* DASHBOARD CONTENT */}
+
+<div className="row g-4">
+
+    {/* TOTAL CUSTOMERS */}
+
+    <div className="col-md-3">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "25px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h6 style={{ color: "#64748b" }}>
+                Total Customers
+            </h6>
+
+            <h2 className="fw-bold">
+                1,245
+            </h2>
+
+        </div>
+
+    </div>
+
+    {/* PROJECTS */}
+
+    <div className="col-md-3">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "25px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h6 style={{ color: "#64748b" }}>
+                Projects
+            </h6>
+
+            <h2 className="fw-bold">
+                84
+            </h2>
+
+        </div>
+
+    </div>
+
+    {/* TASKS */}
+
+    <div className="col-md-3">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "25px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h6 style={{ color: "#64748b" }}>
+                Tasks
+            </h6>
+
+            <h2 className="fw-bold">
+                231
+            </h2>
+
+        </div>
+
+    </div>
+
+    {/* REVENUE */}
+
+    <div className="col-md-3">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "25px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h6 style={{ color: "#64748b" }}>
+                Revenue
+            </h6>
+
+            <h2 className="fw-bold">
+                ₹2.4L
+            </h2>
+
+        </div>
+
+    </div>
+
+{/* MODERN DASHBOARD SECTION */}
+
+<div className="row g-4 mt-2">
+
+    {/* RECENT ACTIVITY */}
+
+    <div className="col-lg-6">
+
+        <div
+            className="p-4"
+            style={{
+
+                background: "white",
+
+                borderRadius: "30px",
+
+                boxShadow:
+                    "0 10px 30px rgba(0,0,0,0.08)"
+
+            }}
+        >
+
+            <h5 className="fw-bold mb-4">
+                Recent Activity
+            </h5>
+
+            <div className="d-flex flex-column gap-3">
+
+                <div
+                    className="p-3 d-flex justify-content-between"
+                    style={{
+                        background: "#f8fafc",
+                        borderRadius: "18px"
+                    }}
+                >
+                    <span>🎉 New Customer Added</span>
+                    <span>2 min ago</span>
+                </div>
+
+                <div
+                    className="p-3 d-flex justify-content-between"
+                    style={{
+                        background: "#f8fafc",
+                        borderRadius: "18px"
+                    }}
+                >
+                    <span>📁 Project Created</span>
+                    <span>10 min ago</span>
+                </div>
+
+                <div
+                    className="p-3 d-flex justify-content-between"
+                    style={{
+                        background: "#f8fafc",
+                        borderRadius: "18px"
+                    }}
+                >
+                    <span>✅ Task Completed</span>
+                    <span>1 hour ago</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    {/* TEAM PERFORMANCE */}
+
+    <div className="col-lg-6 ">
+
+        <div
+            className="p-4"
+            style={{
+
+                background:
+                    "linear-gradient(to right,#2563eb,#3b82f6)",
+
+                borderRadius: "30px",
+
+                color: "white",
+
+                minHeight: "100%"
+
+            }}
+        >
+
+            <h5 className="fw-bold">
+                Team Performance 🚀
+            </h5>
+
+            <h1
+                className="fw-bold mt-4"
+                style={{
+                    fontSize: "55px"
+                }}
+            >
+                94%
+            </h1>
+
+            <p>
+                Productivity increased this month
+            </p>
+
+            <button
+                className="btn mt-3"
+                style={{
+
+                    background: "white",
+
+                    color: "#2563eb",
+
+                    borderRadius: "15px",
+
+                    fontWeight: "600"
+
+                }}
+            >
+                View Report
+            </button>
+
+        </div>
+
+    </div>
+
+{/* PROJECT STATUS SECTION */}
+
+<div className="row g-4 mt-1 ">
+
+    <div className="col-lg-4">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "30px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h5 className="fw-bold mb-4">
+                Ongoing Projects
+            </h5>
+
+            <h1
+                className="fw-bold"
+                style={{
+                    color: "#2563eb",
+                    fontSize: "55px"
+                }}
+            >
+                24
+            </h1>
+
+            <p style={{ color: "#64748b" }}>
+                Active projects running now
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <div className="col-lg-4">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "30px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h5 className="fw-bold mb-4">
+                Completed
+            </h5>
+
+            <h1
+                className="fw-bold"
+                style={{
+                    color: "#22c55e",
+                    fontSize: "55px"
+                }}
+            >
+                118
+            </h1>
+
+            <p style={{ color: "#64748b" }}>
+                Successfully completed
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <div className="col-lg-4">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "30px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h5 className="fw-bold mb-4">
+                Pending Tasks
+            </h5>
+
+            <h1
+                className="fw-bold"
+                style={{
+                    color: "#f59e0b",
+                    fontSize: "55px"
+                }}
+            >
+                36
+            </h1>
+
+            <p style={{ color: "#64748b" }}>
+                Waiting for completion
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{/* REVENUE + TEAM + NOTIFICATIONS */}
+
+<div className="row g-4 mt-2">
+
+    {/* REVENUE CARD */}
+
+    <div className="col-lg-4">
+
+        <div
+            className="p-4"
+            style={{
+                background: "linear-gradient(to right,#22c55e,#16a34a)",
+                borderRadius: "30px",
+                color: "white"
+            }}
+        >
+
+            <h5 className="fw-bold">
+                Monthly Revenue 💰
+            </h5>
+
+            <h1
+                className="fw-bold mt-3"
+                style={{
+                    fontSize: "50px"
+                }}
+            >
+                ₹4.8L
+            </h1>
+
+            <p>
+                +18% growth this month
+            </p>
+
+        </div>
+
+    </div>
+
+    {/* TEAM MEMBERS */}
+
+    <div className="col-lg-4">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "30px",
+                boxShadow:
+                    "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h5 className="fw-bold mb-4">
+                Team Members 👨‍💻
+            </h5>
+
+            <div className="d-flex align-items-center gap-3 mb-3">
+
+                <img
+                    src="https://i.pravatar.cc/100?img=1"
+                    alt=""
+                    style={{
+                        width: "45px",
+                        height: "45px",
+                        borderRadius: "50%"
+                    }}
+                />
+
+                <div>
+                    <h6 className="m-0 fw-bold">
+                        John
+                    </h6>
+                    <small>Frontend Dev</small>
+                </div>
+
+            </div>
+
+            <div className="d-flex align-items-center gap-3 mb-3">
+
+                <img
+                    src="https://i.pravatar.cc/100?img=2"
+                    alt=""
+                    style={{
+                        width: "45px",
+                        height: "45px",
+                        borderRadius: "50%"
+                    }}
+                />
+
+                <div>
+                    <h6 className="m-0 fw-bold">
+                        Sarah
+                    </h6>
+                    <small>UI Designer</small>
+                </div>
+
+            </div>
+
+            <div className="d-flex align-items-center gap-3">
+
+                <img
+                    src="https://i.pravatar.cc/100?img=3"
+                    alt=""
+                    style={{
+                        width: "45px",
+                        height: "45px",
+                        borderRadius: "50%"
+                    }}
+                />
+
+                <div>
+                    <h6 className="m-0 fw-bold">
+                        David
+                    </h6>
+                    <small>Backend Dev</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {/* NOTIFICATIONS */}
+
+    <div className="col-lg-4">
+
+        <div
+            className="p-4"
+            style={{
+                background: "white",
+                borderRadius: "30px",
+                boxShadow:
+                    "0 10px 30px rgba(0,0,0,0.08)"
+            }}
+        >
+
+            <h5 className="fw-bold mb-4">
+                Notifications 🔔
+            </h5>
+
+            <div
+                className="p-3 mb-3"
+                style={{
+                    background: "#f8fafc",
+                    borderRadius: "15px"
+                }}
+            >
+                New project assigned
+            </div>
+
+            <div
+                className="p-3 mb-3"
+                style={{
+                    background: "#f8fafc",
+                    borderRadius: "15px"
+                }}
+            >
+                Customer meeting today
+            </div>
+
+            <div
+                className="p-3"
+                style={{
+                    background: "#f8fafc",
+                    borderRadius: "15px"
+                }}
+            >
+                Revenue target achieved
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{/* UPCOMING MEETINGS */}
+
+<div className="mt-4">
+
+    <div
+        className="p-4"
+        style={{
+            background: "white",
+            borderRadius: "30px",
+            boxShadow:
+                "0 10px 30px rgba(0,0,0,0.08)"
+        }}
+    >
+
+        <h5 className="fw-bold mb-4">
+            Upcoming Meetings 📅
+        </h5>
+
+        <div className="row g-3">
+
+            <div className="col-md-4">
+
+                <div
+                    className="p-3"
+                    style={{
+                        background: "#f8fafc",
+                        borderRadius: "20px"
+                    }}
+                >
+
+                    <h6 className="fw-bold">
+                        Client Meeting
+                    </h6>
+
+                    <p className="m-0">
+                        Today - 11:00 AM
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div className="col-md-4">
+
+                <div
+                    className="p-3"
+                    style={{
+                        background: "#f8fafc",
+                        borderRadius: "20px"
+                    }}
+                >
+
+                    <h6 className="fw-bold">
+                        Team Standup
+                    </h6>
+
+                    <p className="m-0">
+                        Tomorrow - 10:00 AM
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div className="col-md-4">
+
+                <div
+                    className="p-3"
+                    style={{
+                        background: "#f8fafc",
+                        borderRadius: "20px"
+                    }}
+                >
+
+                    <h6 className="fw-bold">
+                        Project Review
+                    </h6>
+
+                    <p className="m-0">
+                        Friday - 3:00 PM
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
 
             </div>
 

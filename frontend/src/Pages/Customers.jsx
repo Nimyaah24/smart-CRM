@@ -481,27 +481,10 @@ const Customers = () => {
 
 
                 {/* RIGHT */}
-                <DarkModeToggle
-                    darkMode={darkMode}
-                    setDarkMode={setDarkMode}
-                />
 
-            </div>
-
-
-
-            {/*
-            ========================================
-            TOP SECTION
-            ========================================
-            */}
-
-            <div className="row mb-4">
-
-
-
+                
                 {/* SEARCH */}
-                <div className="col-lg-8 mb-3">
+                <div className="col-lg-8 mb-3 ">
 
                     <div
                         className="d-flex align-items-center px-4"
@@ -512,6 +495,7 @@ const Customers = () => {
 
                             borderRadius: "22px",
 
+                            marginLeft:"700px",
                             background: darkMode
                                 ? "#0f172a"
                                 : "white",
@@ -555,8 +539,57 @@ const Customers = () => {
                     </div>
 
                 </div>
+                <DarkModeToggle
+                    darkMode={darkMode}
+                    setDarkMode={setDarkMode}
+                />
+
+            </div>
 
 
+
+            {/*
+            ========================================
+            TOP SECTION
+            ========================================
+            */}
+
+            <div className="row mb-4">
+
+
+
+
+<div className="row mb-4">
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Total Customers</h6>
+            <h2 className="fw-bold">{customers.length}</h2>
+        </div>
+    </div>
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Active</h6>
+            <h2 className="fw-bold text-success">980</h2>
+        </div>
+    </div>
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Premium</h6>
+            <h2 className="fw-bold text-warning">245</h2>
+        </div>
+    </div>
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>New This Month</h6>
+            <h2 className="fw-bold text-primary">120</h2>
+        </div>
+    </div>
+
+</div>
 
                 {/* TOTAL CARD */}
                 <div className="col-lg-4 mb-3">

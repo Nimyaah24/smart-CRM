@@ -639,6 +639,39 @@ const Projects = () => {
 
                             </div>
 
+
+<div className="row mb-4">
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Total Projects</h6>
+            <h2 className="fw-bold">84</h2>
+        </div>
+    </div>
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Completed</h6>
+            <h2 className="fw-bold text-success">42</h2>
+        </div>
+    </div>
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Pending</h6>
+            <h2 className="fw-bold text-warning">18</h2>
+        </div>
+    </div>
+
+    <div className="col-lg-3">
+        <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Revenue</h6>
+            <h2 className="fw-bold text-primary">$25K</h2>
+        </div>
+    </div>
+
+</div>
+
                         </div>
 
                     </div>
@@ -646,6 +679,114 @@ const Projects = () => {
                 ))}
 
             </div>
+
+
+{/* TEAM WORKING SECTION */}
+
+<div className="mt-4">
+
+    <div
+        className="p-4"
+        style={{
+            background:
+                "linear-gradient(to right,#2563eb,#3b82f6)",
+            borderRadius: "30px",
+            color: "white"
+        }}
+    >
+
+        <h4 className="fw-bold">
+            Team Working On Projects 👨‍💻
+        </h4>
+
+        <p>
+            12 Developers currently active
+        </p>
+
+        <h1
+            className="fw-bold"
+            style={{
+                fontSize: "60px"
+            }}
+        >
+            92%
+        </h1>
+
+        <p>
+            Overall productivity this month
+        </p>
+
+        <button
+            className="btn mt-3"
+            style={{
+                background: "white",
+                color: "#2563eb",
+                borderRadius: "15px",
+                fontWeight: "600"
+            }}
+        >
+            View Team Report
+        </button>
+
+    </div>
+
+</div>
+
+{/* RECENT ACTIVITY */}
+
+<div className="mt-4">
+
+    <div
+        className="p-4"
+        style={{
+            background: "white",
+            borderRadius: "30px",
+            boxShadow:
+                "0 10px 30px rgba(0,0,0,0.08)"
+        }}
+    >
+
+        <h4 className="fw-bold mb-4">
+            Recent Activity
+        </h4>
+
+        <div className="d-flex flex-column gap-3">
+
+            <div
+                className="p-3"
+                style={{
+                    background: "#f8fafc",
+                    borderRadius: "18px"
+                }}
+            >
+                🚀 Ecommerce Website deployed
+            </div>
+
+            <div
+                className="p-3"
+                style={{
+                    background: "#f8fafc",
+                    borderRadius: "18px"
+                }}
+            >
+                📁 CRM Dashboard updated
+            </div>
+
+            <div
+                className="p-3"
+                style={{
+                    background: "#f8fafc",
+                    borderRadius: "18px"
+                }}
+            >
+                ✅ School Management completed
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         </div>
 
