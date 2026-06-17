@@ -175,15 +175,17 @@ fetchCustomers();
   };
 
   const editCustomer = (item) => {
-    setEditId(item._id);
+  setEditId(item._id);
 
-    setForm({
-      name: item.name,
-      email: item.email,
-      phone: item.phone,
-      location: item.location,
-    });
-  };
+  setForm({
+    name: item.name,
+    email: item.email,
+    phone: item.phone,
+    location: item.location,
+  });
+
+  setShowModal(true);
+};
 
 const updateCustomer = async () => {
   try {
@@ -224,11 +226,24 @@ localStorage.setItem(
     console.log("UPDATE RESPONSE =", data);
 
     fetchCustomers();
+
+    setEditId(null);
+
+setForm({
+  name: "",
+  email: "",
+  phone: "",
+  location: "",
+});
   } catch (err) {
     console.log(err);
     toast.error("Something went wrong");
   }
 };
+
+
+
+
 
   const filteredCustomers = customers.filter(
     (item) =>
@@ -749,18 +764,22 @@ localStorage.setItem(
               onChange={handleChange}
             />
           </div>
-        </div>
+        </div> 
 
-        <div className="d-flex gap-2">
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              addCustomer();
-              setShowModal(false);
-            }}
-          >
-            Save
-          </button>
+   <button
+  className="btn btn-primary"
+  onClick={() => {
+    if (editId) {
+      updateCustomer();
+    } else {
+      addCustomer();
+    }
+
+    setShowModal(false);
+  }}
+>
+  {editId ? "Update" : "Save"}
+</button>
 
           <button
             className="btn btn-secondary"
@@ -772,7 +791,7 @@ localStorage.setItem(
           </button>
         </div>
       </div>
-    </div>
+    
   )
 }
 
