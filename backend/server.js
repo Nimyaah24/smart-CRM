@@ -33,8 +33,11 @@ const app = express()
 
 // frontend requests allow cheyyan cors middleware use cheyyunnu
 app.use(cors({
-origin: "http://localhost:5173",
-credentials: true
+  origin: [
+    "http://localhost:5173",
+    "https://smart-crm-i65u.vercel.app"
+  ],
+  credentials: true
 }))
 
 // cookies access cheyyan middleware use cheyyunnu
