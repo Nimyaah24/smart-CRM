@@ -1,53 +1,46 @@
+// jwt token verify cheyyan jsonwebtoken import cheyyunnu
+const jwt = require("jsonwebtoken");
 
-//  token verify cheyan      61
-const jwt=require('jsonwebtoken')
+// user authentication check cheyyan middleware function create cheyyunnu
+const authmiddileware = async (req, res, next) => {
+  try {
 
-// middileware set cheyunnu       62
-const authmiddileware = async(req,res,next)=>{
-try{
-// frontend/postmanil send cheyunna  token edkunu          63
-// http requestinte extra information header
-const headers = req.header('Authorization')
+    // browser cookies-il ninn token edukkunnu
+    const token = req.cookies.token;
 
-// header illeghil        64
-if(!headers){
-    return res.status(400).json({msg:"no token"})
-}
+    // token console-il display cheyyunnu debugginginu vendi
+    console.log("TOKEN =", token);
 
-// token sent chyumbo bearer token aayt aan pova               65
-// bearer 0
-// token 1
-// split chyumbo bearer povm
-const token = req.cookies.token
-console.log(token);
-
- // token illeghil       66
-    if(!token){
-        return res.status(404).json({msg:"No token found"})
+    // token illenkil unauthorized response return cheyyunnu
+    if (!token) {
+      return res.status(401).json({
+        msg: "No token found"
+      });
     }
 
-    // token verify cheyunnu        67
- const verifyToken = jwt.verify(token,process.env.JWT_SECRETKEY)
+    // token verify cheyth user data decode cheyyunnu
+    const verifyToken = jwt.verify(
+      token,
+      process.env.JWT_SECRETKEY
+    );
 
-   // save your user info            68
-    // req token verify chyth save avunnu
-    req.user=verifyToken
+    // decoded user data request object-il store cheyyunnu
+    req.user = verifyToken;
 
-     // next userinfo use cheyan         69
-    // nextilki ponm alleghil stuck aavm
-    next()
-}
- catch (err) {
+    // adutha middleware allenkil controllerilek pokunnu
+    next();
 
-        console.log("TOKEN ERROR:", err)
+  } catch (err) {
 
-        return res.status(401).json({
-            msg: "Invalid token"
-        })
-    }
-}
+    // token verification error console-il display cheyyunnu
+    console.log("TOKEN ERROR:", err);
 
+    // invalid token aanenkil unauthorized response return cheyyunnu
+    return res.status(401).json({
+      msg: "Invalid token"
+    });
+  }
+};
 
-// middileware routeil use cheyan      70
-module.exports=authmiddileware
-
+// middleware export cheyyunnu vere files-il use cheyyan
+module.exports = authmiddileware;

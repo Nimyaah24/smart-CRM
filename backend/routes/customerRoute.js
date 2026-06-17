@@ -1,54 +1,23 @@
-// express import
+// express framework import cheyyunnu customer routes create cheyyan
 const express = require("express")
 
-// router create
+// router instance create cheyyunnu customer APIs manage cheyyan
 const router = express.Router()
 
-// controller import
-const customerController =
-    require("../controller/customerController")
+// customer controller import cheyyunnu customer functions use cheyyan
+const customerController = require("../controller/customerController")
 
+// customer add cheyyan POST API route create cheyyunnu
+router.post("/add", customerController.addCustomer)
 
+// ella customers fetch cheyyan GET API route create cheyyunnu
+router.get("/all", customerController.getCustomers)
 
-// ========================================
-// ADD CUSTOMER
-// ========================================
-router.post(
-    "/add",
-    customerController.addCustomer
-)
+// customer delete cheyyan DELETE API route create cheyyunnu
+router.delete("/delete/:id", customerController.deleteCustomer)
 
+// customer update cheyyan PUT API route create cheyyunnu
+router.put("/update/:id", customerController.updateCustomer)
 
-
-// ========================================
-// GET ALL CUSTOMERS
-// ========================================
-router.get(
-    "/all",
-    customerController.getCustomers
-)
-
-
-
-// ========================================
-// DELETE CUSTOMER
-// ========================================
-router.delete(
-    "/delete/:id",
-    customerController.deleteCustomer
-)
-
-
-
-// ========================================
-// UPDATE CUSTOMER
-// ========================================
-router.put(
-    "/update/:id",
-    customerController.updateCustomer
-)
-
-
-
-// export router
+// router export cheyyunnu server.js-il use cheyyan
 module.exports = router

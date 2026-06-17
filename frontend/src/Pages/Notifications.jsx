@@ -3,7 +3,7 @@
 // ============================================
 
 // react hooks
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 // router
 import { useNavigate } from "react-router-dom"
@@ -40,7 +40,7 @@ const Notifications = () => {
 
     const navigate = useNavigate()
 
-
+const [search, setSearch] = useState("")
 
     /*
     ============================================
@@ -48,8 +48,26 @@ const Notifications = () => {
     ============================================
     */
 
-    const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(
+  JSON.parse(localStorage.getItem("darkMode")) || false
+);
 
+useEffect(() => {
+  localStorage.setItem(
+    "darkMode",
+    JSON.stringify(darkMode)
+  );
+}, [darkMode]);
+
+
+
+
+useEffect(() => {
+  localStorage.setItem(
+    "darkMode",
+    JSON.stringify(darkMode)
+  );
+}, [darkMode]);
 
 
     /*
@@ -58,54 +76,29 @@ const Notifications = () => {
     ============================================
     */
 
-    const [notifications] = useState([
+   const [notifications, setNotifications] =
+  useState(() => {
+    return (
+      JSON.parse(
+        localStorage.getItem("notifications")
+      ) || []
+    );
+  });
 
-        {
-            id: 1,
-            title: "New Customer Added",
-            message: "John added a new customer into CRM system.",
-            time: "2 min ago",
-            type: "success",
-            unread: true
-        },
+console.log(
+  "Notifications State:",
+  notifications
+);
 
-        {
-            id: 2,
-            title: "Project Deadline Warning",
-            message: "Dashboard redesign project deadline tomorrow.",
-            time: "10 min ago",
-            type: "warning",
-            unread: true
-        },
 
-        {
-            id: 3,
-            title: "New Team Message",
-            message: "Alex sent new message in team chat.",
-            time: "25 min ago",
-            type: "message",
-            unread: false
-        },
+  useEffect(() => {
+  localStorage.setItem(
+    "notifications",
+    JSON.stringify(notifications)
+  );
+}, [notifications]);
 
-        {
-            id: 4,
-            title: "Task Completed",
-            message: "Analytics module completed successfully.",
-            time: "1 hour ago",
-            type: "success",
-            unread: false
-        },
 
-        {
-            id: 5,
-            title: "Server Activity",
-            message: "System backup completed automatically.",
-            time: "2 hours ago",
-            type: "activity",
-            unread: false
-        }
-
-    ])
 
 
 
@@ -306,6 +299,9 @@ const Notifications = () => {
 
                         <input
 
+                          value={search}
+  onChange={(e) => setSearch(e.target.value)}
+
                             type="text"
 
                             placeholder="Search notifications..."
@@ -418,6 +414,10 @@ const Notifications = () => {
                     Activity Feed
 
                 </h1>
+                
+{/* <h3 style={{ color: "red" }}>
+  Notifications: {notifications.length}
+</h3> */}
 
 
 
@@ -470,8 +470,41 @@ const Notifications = () => {
 
                     <Bell size={18} />
 
-                    2 Unread Notifications
+                   {
+  notifications.filter(
+    (item) => item.unread
+  ).length
+} Unread Notifications
 
+<div className="d-flex gap-2">
+
+
+
+</div>
+<button
+className="btn btn-outline-light"
+onClick={() =>
+setNotifications(
+notifications.map(n => ({
+...n,
+unread:false
+}))
+)
+}
+>
+✓ Read All
+</button>
+
+<button
+className="btn btn-danger"
+onClick={() => {
+if(window.confirm("Clear all notifications?")){
+setNotifications([])
+}
+}}
+>
+🗑 Clear
+</button>
                 </div>
 
             </div>
@@ -483,39 +516,57 @@ const Notifications = () => {
             ============================================ */}
 
             <div>
-
+{console.log("Rendering", notifications)}
+{/* <h2 style={{ color: "red" }}>
+  List Count: {notifications.length}
+</h2> */}
                 {
 
-                    notifications.map((item) => (
+                    notifications
+.filter(
+  (item) =>
+    item.title
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+
+    item.message
+      .toLowerCase()
+      .includes(search.toLowerCase())
+)
+.map((item) => (
 
                         <div
 
                             key={item.id}
-
+onClick={() => {
+  setNotifications(
+    notifications.map((n) =>
+      n.id === item.id
+        ? {
+            ...n,
+            unread: false,
+          }
+        : n
+    )
+  )
+}}
                             className="p-4 mb-4 d-flex justify-content-between align-items-center"
 
-                            style={{
-
-                                borderRadius: "30px",
-
-                                background:
-                                    darkMode
-                                        ? "rgba(15,23,42,0.8)"
-                                        : "rgba(255,255,255,0.7)",
-
-                                backdropFilter: "blur(10px)",
-
-                                boxShadow:
-                                    "0 10px 30px rgba(0,0,0,0.08)",
-
-                                transition: "0.3s",
-
-                                border:
-                                    item.unread
-                                        ? "1px solid #2563eb"
-                                        : "1px solid transparent"
-
-                            }}
+                          style={{
+borderRadius:"24px",
+background:
+darkMode
+? "#0f172a"
+: "#ffffff",
+boxShadow:
+"0 10px 30px rgba(0,0,0,0.08)",
+cursor:"pointer",
+borderLeft:
+item.unread
+? "5px solid #2563eb"
+: "5px solid transparent",
+transition:"0.3s"
+}}
                         >
 
 
@@ -660,31 +711,27 @@ const Notifications = () => {
 
                             {/* RIGHT */}
 
-                            <button
+<button
+  className="btn"
+  onClick={(e) => {
 
-                                className="btn"
+    e.stopPropagation();
 
-                                style={{
-
-                                    width: "50px",
-
-                                    height: "50px",
-
-                                    borderRadius: "16px",
-
-                                    background:
-                                        darkMode
-                                            ? "#1e293b"
-                                            : "#f8fafc",
-
-                                    border: "none"
-
-                                }}
-                            >
-
-                                <Trash2 color="#ef4444" />
-
-                            </button>
+    if (
+      window.confirm(
+        "Delete this notification?"
+      )
+    ) {
+      setNotifications(
+        notifications.filter(
+          (n) => n.id !== item.id
+        )
+      );
+    }
+  }}
+>
+  <Trash2 color="#ef4444" />
+</button>
 
                         </div>
 

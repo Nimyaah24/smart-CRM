@@ -1,228 +1,142 @@
-// customer model import
+// customer data database-il manage cheyyan Customer model import cheyyunnu
 const Customer = require("../model/customerModel")
 
-
-
-// ========================================
-// ADD CUSTOMER
-// ========================================
+// new customer create cheyyan addCustomer function create cheyyunnu
 const addCustomer = async (req, res) => {
 
     try {
 
-        // body il ninn data edukunnu
-        const {
-            name,
-            email,
-            phone,
-            location
-        } = req.body
+        // frontend-il ninn customer details edukunnu
+        const { name, email, phone, location } = req.body
 
+        // same email already database-il undo enn check cheyyunnu
+        const existingCustomer = await Customer.findOne({ email })
 
-        // existing customer check
-        const existingCustomer =
-            await Customer.findOne({ email })
-
-
-        // already customer undenghil
+        // customer already undenkil response return cheyyunnu
         if (existingCustomer) {
-
-            return res.status(400).json({
-                msg: "customer already exists"
-            })
-
+            return res.status(400).json({ msg: "customer already exists" })
         }
 
+        // customer database-il save cheyyunnu
+        const newCustomer = await Customer.create({ name, email, phone, location })
 
-        // database save
-        const newCustomer =
-            await Customer.create({
-
-                name,
-                email,
-                phone,
-                location
-
-            })
-
-
-        // success response
-        res.status(201).json({
-
-            msg: "customer added",
-            newCustomer
-
-        })
+        // add success response return cheyyunnu
+        res.status(201).json({ msg: "customer added", newCustomer })
 
     }
 
     catch (err) {
 
+        // error console-il display cheyyunnu
         console.log(err)
 
-        res.status(500).json({
-            msg: "add customer failed"
-        })
+        // add failed response return cheyyunnu
+        res.status(500).json({ msg: "add customer failed" })
 
     }
 
 }
 
-
-
-
-// ========================================
-// GET CUSTOMERS
-// ========================================
+// ella customers fetch cheyyan getCustomers function create cheyyunnu
 const getCustomers = async (req, res) => {
 
     try {
 
-        // all customers fetch
-        const customers =
-            await Customer.find()
+        // database-il ninn ella customers fetch cheyyunnu
+        const customers = await Customer.find()
 
-
-        // response
-        res.status(200).json({
-
-            msg: "all customers",
-            customers
-
-        })
+        // fetch success response return cheyyunnu
+        res.status(200).json({ msg: "all customers", customers })
 
     }
 
     catch (err) {
 
+        // error console-il display cheyyunnu
         console.log(err)
 
-        res.status(500).json({
-            msg: "get customers failed"
-        })
+        // fetch failed response return cheyyunnu
+        res.status(500).json({ msg: "get customers failed" })
 
     }
 
 }
 
-
-
-
-// ========================================
-// DELETE CUSTOMER
-// ========================================
+// customer delete cheyyan deleteCustomer function create cheyyunnu
 const deleteCustomer = async (req, res) => {
 
     try {
 
-        // id params il ninn edukunnu
+        // params-il ninn customer id edukunnu
         const { id } = req.params
 
+        // customer database-il ninn delete cheyyunnu
+        const deletedCustomer = await Customer.findByIdAndDelete(id)
 
-        // delete customer
-        const deletedCustomer =
-            await Customer.findByIdAndDelete(id)
-
-
-        // customer illenghil
+        // customer kandethiyillenkil response return cheyyunnu
         if (!deletedCustomer) {
-
-            return res.status(404).json({
-                msg: "customer not found"
-            })
-
+            return res.status(404).json({ msg: "customer not found" })
         }
 
-
-        // success response
-        res.status(200).json({
-            msg: "customer deleted"
-        })
+        // delete success response return cheyyunnu
+        res.status(200).json({ msg: "customer deleted" })
 
     }
 
     catch (err) {
 
+        // error console-il display cheyyunnu
         console.log(err)
 
-        res.status(500).json({
-            msg: "delete customer failed"
-        })
+        // delete failed response return cheyyunnu
+        res.status(500).json({ msg: "delete customer failed" })
 
     }
 
 }
 
-
-
-
-// ========================================
-// UPDATE CUSTOMER
-// ========================================
+// customer details update cheyyan updateCustomer function create cheyyunnu
 const updateCustomer = async (req, res) => {
 
-    try {
+  try {
 
-        // id params il ninn edukunnu
-        const { id } = req.params
+    // params-il ninn customer id edukunnu
+    const { id } = req.params
 
+    // debugging-n vendi id console-il display cheyyunnu
+    console.log("ID =", id)
 
-        // update customer
-        const updatedCustomer =
-            await Customer.findByIdAndUpdate(
+    // debugging-n vendi id length display cheyyunnu
+    console.log("ID LENGTH =", id.length)
 
-                id,
+    // debugging-n vendi request body display cheyyunnu
+    console.log("BODY =", req.body)
 
-                req.body,
+    // customer details database-il update cheyyunnu
+    const updatedCustomer = await Customer.findByIdAndUpdate(id, req.body, { returnDocument: "after" })
 
-                {
-                    new: true
-                }
+    // debugging-n vendi updated customer display cheyyunnu
+    console.log("UPDATED =", updatedCustomer)
 
-            )
-
-
-        // customer illenghil
-        if (!updatedCustomer) {
-
-            return res.status(404).json({
-                msg: "customer not found"
-            })
-
-        }
-
-
-        // success response
-        res.status(200).json({
-
-            msg: "customer updated",
-            updatedCustomer
-
-        })
-
+    // customer kandethiyillenkil response return cheyyunnu
+    if (!updatedCustomer) {
+      return res.status(404).json({ msg: "customer not found" })
     }
 
-    catch (err) {
+    // update success response return cheyyunnu
+    res.status(200).json({ msg: "customer updated", updatedCustomer })
 
-        console.log(err)
+  } catch (err) {
 
-        res.status(500).json({
-            msg: "update customer failed"
-        })
+    // update error console-il display cheyyunnu
+    console.log("UPDATE ERROR =", err)
 
-    }
+    // update failed response return cheyyunnu
+    res.status(500).json({ msg: "update customer failed", error: err.message })
+
+  }
 
 }
 
-
-
-
-// export functions
-module.exports = {
-
-    addCustomer,
-    getCustomers,
-    deleteCustomer,
-    updateCustomer
-
-}
+// controller functions export cheyyunnu route files-il use cheyyan
+module.exports = { addCustomer, getCustomers, deleteCustomer, updateCustomer }

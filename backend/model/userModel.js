@@ -1,49 +1,45 @@
+// mongodb import cheyyunnu schema create cheyyanum database interact cheyyanum
+const mongoose = require('mongoose')
 
+// user collectioninte structure define cheyyan schema create cheyyunnu
+const userSchema = new mongoose.Schema({
 
-// mongodb import cheyunnu mongodb schema create cheyan      22
-const mongoose=require('mongoose')
-
-// user db structure create cheyunnu       23
-const userSchema= new mongoose.Schema({
-
-    // user name filed    24
-name:{
-    type:String,
-    required:true
+// userinte name store cheyyan field create cheyyunnu
+name: {
+    type: String,
+    required: true
 },
 
-// user email filed    25
-email:{
-    type:String,
-    required:true,
-    // same email 2 pravisyathil koodthal varan paadila  
+// userinte email store cheyyan field create cheyyunnu
+email: {
+    type: String,
+    required: true,
     unique: true
 },
 
-// password store cheyan      26
-password:{
-    type:String,
-    required:true
+// userinte password store cheyyan field create cheyyunnu
+password: {
+    type: String,
+    required: true
 },
 
-// otp verification save aavan        27
-otp:{
-type:String
+// email verification OTP store cheyyan field create cheyyunnu
+otp: {
+    type: String
 },
 
-// email verify aanon check cheyan       28
-isVerified:{
-    type:Boolean,
-    default:false
+// user verify cheythittundo enn track cheyyan field create cheyyunnu
+isVerified: {
+    type: Boolean,
+    default: false
 }
-}, 
+},
 
-// createdAt and updatedAt automatic save cheyum      29
-{timestamps:true})
+// createdAt um updatedAt um automatic aayi save cheyyan timestamps enable cheyyunnu
+{ timestamps: true })
 
-// mongodb collection create cheyunnu       30
-const User= mongoose.model("user",userSchema)
+// user schema use cheyth mongodb model create cheyyunnu
+const User = mongoose.model("user", userSchema)
 
-// controlleril use cheyan export cheyunnu       31
-module.exports=User
-
+// model export cheyyunnu vere files-il use cheyyan
+module.exports = User

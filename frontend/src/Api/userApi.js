@@ -1,52 +1,13 @@
 
-// // axios import cheyunnu api call cheyan
-// import axios from "axios"
-
-// // common api create cheyunnu
-// const API = axios.create({
-//     // backend base url
-//     baseURL: "http://localhost:5000/api/user",
-
-//     // cookie frontendiln backendilek send cheyan
-//     withCredentials: true
-// })
-
-// // login api
-// // login data backendilek send cheyunnu
-// // export const loginUser = (data) => {
 
 
-// //     return API.post("/login", data)
-// // }
-
-// // register api
-// // register data backendilek send cheyunnu
-// export const registerUser = (data) => {
-//     return API.post("/register", data)
-// }
-
-// const baseURL= "http://localhost:5000/api/user"
-
-
-// export const loginUser= async(data)=>{
-//     const res = await fetch(`${baseURL}/login`,{
-//         method:"POST",
-//         headers:{
-//             "content-Type":"application/json"
-//         },
-//         credentials:"include",
-//         body:JSON.stringify(data)
-//     })
-//     return res.json()
-// }
-
-
-
-// backend base url
+// backend API base URL store cheyyunnu
 const baseURL = "http://localhost:5000/api/user";
 
-// register api
+// new user register cheyyan register API function create cheyyunnu
 export const registerUser = async (data) => {
+
+  // user registration data backend-il send cheyyunnu
   const res = await fetch(`${baseURL}/register`, {
     method: "POST",
     headers: {
@@ -56,11 +17,14 @@ export const registerUser = async (data) => {
     body: JSON.stringify(data),
   });
 
+  // response JSON aayi return cheyyunnu
   return res.json();
 };
 
-// login api
+// user login cheyyan login API function create cheyyunnu
 export const loginUser = async (data) => {
+
+  // login credentials backend-il verify cheyyan send cheyyunnu
   const res = await fetch(`${baseURL}/login`, {
     method: "POST",
     headers: {
@@ -70,5 +34,6 @@ export const loginUser = async (data) => {
     body: JSON.stringify(data),
   });
 
+  // response JSON aayi return cheyyunnu
   return res.json();
 };

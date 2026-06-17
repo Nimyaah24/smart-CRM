@@ -1,30 +1,27 @@
-
-// mongodb connect cheyan mongoose vnm      6
+// mongodb connect cheyyan mongoose import cheyyunnu
 const mongoose = require('mongoose')
 
-// .env values load aavn      7
+// .env file values load cheyyan dotenv import cheyyunnu
 require('dotenv').config()
 
-// db connect function create chyunu      8
+// mongodb connection function create cheyyunnu
 const connectDB = async () => {
 
-    // error handle cheyan      9
+    // database connection error handle cheyyan try block use cheyyunnu
     try {
 
-        // .env ile MONGO_URL use chyunu       10
-        // process.env .env values access cheyan
-        // MONGO_URL .env ile variable name
+        // .env-il store cheytha MONGO_URL use cheyth mongodb connect cheyyunnu
         await mongoose.connect(process.env.MONGO_URL)
 
-        // success      11
+        // mongodb connect success message print cheyyunnu
         console.log("mongodb connected successfully");
     }
 
-    // error      12
+    // database connection fail aayal error handle cheyyunnu
     catch (err) {
         console.log("mongodb is not connected");
     }
 }
 
-// server.jsil use chyennaghil exports chyanm      13
-module.exports=connectDB
+// server.js-il use cheyyan connectDB function export cheyyunnu
+module.exports = connectDB

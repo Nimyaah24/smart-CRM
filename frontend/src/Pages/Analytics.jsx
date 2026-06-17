@@ -1,971 +1,815 @@
-// ============================================
-// IMPORTS
-// ============================================
 
-// react hook
-import { useState } from "react"
-
-// route navigation
+// react hooks import cheyyunnu stateum lifecycleum manage cheyyan
+import { useState, useEffect } from "react"
+// page navigation cheyyan useNavigate import cheyyunnu
 import { useNavigate } from "react-router-dom"
-
-// dark mode component
+// back button icon import cheyyunnu
+import { ArrowLeft } from "lucide-react"
+// dark mode toggle component import cheyyunnu
 import DarkModeToggle from "../components/DarkModeToggle"
-
-// recharts
+// recharts chart components import cheyyunnu analytics charts create cheyyan
 import {
-    ResponsiveContainer,
-    AreaChart,
-    Area,
-    XAxis,
-    Tooltip,
-    PieChart,
-    Pie,
-    Cell,
-    BarChart,
-    Bar
-}
-    from "recharts"
-
-// icons
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar
+} from "recharts"
+// analytics icons import cheyyunnu UI display cheyyan
 import {
-    TrendingUp,
-    DollarSign,
-    Activity,
-    Users,
-    Bell,
-    Search,
-    ArrowLeft,
-    BarChart3
-}
-    from "lucide-react"
-
-
-
-// ============================================
-// ANALYTICS COMPONENT
-// ============================================
-
-const Analytics = () => {
-
-    /*
-    ============================================
-    NAVIGATION
-    ============================================
-    */
-
-    const navigate = useNavigate()
-
-
-
-    /*
-    ============================================
-    DARK MODE STATE
-    ============================================
-    */
-
-    const [darkMode, setDarkMode] = useState(false)
-
-
-
-    /*
-    ============================================
-    CHART DATA graphil pont chyen
-    ============================================
-    */
-
-    const revenueData = [
-
-        {
-            // month x-axisil kaanikunna text
-            month: "Jan",
-            // height
-            revenue: 4000
-        },
-
-        {
-            month: "Feb",
-            revenue: 3000
-        },
-
-        {
-            month: "Mar",
-            revenue: 5000
-        },
-
-        {
-            month: "Apr",
-            revenue: 7000
-        },
-
-        {
-            month: "May",
-            revenue: 6000
-        },
-
-        {
-            month: "Jun",
-            revenue: 9000
-        }
-
-    ]
-
-
-
-    /*
-    ============================================
-    PIE CHART DATA
-    ============================================
-    */
-
-    const pieData = [
-
-        {
-            name: "Completed",
-            value: 65
-        },
-
-        {
-            name: "Pending",
-            value: 20
-        },
-
-        {
-            name: "Running",
-            value: 15
-        }
-
-    ]
-
-
-
-    /*
-    ============================================
-    BAR CHART DATA
-    ============================================
-    */
-
-    const salesData = [
-
-        {
-            name: "Mon",
-            sales: 2400
-        },
-
-        {
-            name: "Tue",
-            sales: 1398
-        },
-
-        {
-            name: "Wed",
-            sales: 9800
-        },
-
-        {
-            name: "Thu",
-            sales: 3908
-        },
-
-        {
-            name: "Fri",
-            sales: 4800
-        },
-
-        {
-            name: "Sat",
-            sales: 3800
-        }
-
-    ]
-
-
-
-    /*
-    ============================================
-    PIE COLORS
-    ============================================
-    */
-
-    const COLORS = [
-
-        "#2563eb",
-        "#22c55e",
-        "#f59e0b"
-
-    ]
-
-
-
-    return (
-
-        /*
-        ============================================
-        MAIN CONTAINER
-        ============================================
-        */
-
-        <div
-
-            className="container-fluid"
-
-            style={{
-
-                minHeight: "100vh",
-
-                background:
-                    darkMode
-                        ? "#020617"
-                        : "#f1f5f9",
-
-                padding: "30px",
-
-                transition: "0.3s"
-
-            }}
-        >
-
-
-
-            {/* ============================================
-            TOP NAVBAR
-            ============================================ */}
-
-            <div
-
-                className="d-flex justify-content-between align-items-center mb-4"
-
+  TrendingUp,
+  DollarSign,
+  Activity,
+  Users,
+  BarChart3
+} from "lucide-react"
+
+// analytics component create cheyyunnu
+  const Analytics = () => {
+
+  // page navigation use cheyyan hook create cheyyunnu
+  const navigate = useNavigate()
+
+    // dark mode state create cheyyunnu localStorage value use cheythu
+    const [darkMode, setDarkMode] = useState(
+  JSON.parse(localStorage.getItem("darkMode")) || false
+);
+
+  // dark mode value localStorage-il save cheyyunnu
+useEffect(() => {
+  localStorage.setItem(
+    "darkMode",
+    JSON.stringify(darkMode)
+  );
+}, [darkMode]);
+
+  // customers data store cheyyan state create cheyyunnu
+  const [customers, setCustomers] = useState([])
+
+    // projects data store cheyyan state create cheyyunnu
+  const [projects, setProjects] = useState([])
+
+    // tasks data store cheyyan state create cheyyunnu
+  const [tasks, setTasks] = useState([])
+
+
+  // dark mode value localStorage-il update cheyyunnu
+useEffect(() => {
+  localStorage.setItem(
+    "darkMode",
+    JSON.stringify(darkMode)
+  )
+}, [darkMode])
+
+
+  // component load aakumbo data fetch cheyyunnu
+  useEffect(() => {
+    fetchCustomers()
+    fetchProjects()
+    fetchTasks()
+  }, [])
+
+
+    // customer data backend-il ninn fetch cheyyan function create cheyyunnu
+  const fetchCustomers = async () => {
+      // error handle cheyyan try block use cheyyunnu
+    try {
+          // customer API call cheyyunnu
+      const res = await fetch(
+        "http://localhost:5000/api/customer/all"
+      )
+
+          // response json aakki convert cheyyunnu
+      const data = await res.json()
+
+          // customer data state-il save cheyyunnu
+      setCustomers(data.customers || [])
+
+        // error console-il show cheyyunnu
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // project data backend-il ninn fetch cheyyan function create cheyyunnu
+  const fetchProjects = async () => {
+
+      // error handle cheyyan try block use cheyyunnu
+    try {
+
+          // project API call cheyyunnu
+      const res = await fetch(
+        "http://localhost:5000/api/project/all"
+      )
+
+          // response json aakki convert cheyyunnu
+      const data = await res.json()
+
+          // project data state-il save cheyyunnu
+      setProjects(data.projects || [])
+
+        // error console-il show cheyyunnu
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // task data backend-il ninn fetch cheyyan function create cheyyunnu
+  const fetchTasks = async () => {
+
+      // error handle cheyyan try block use cheyyunnu
+    try {
+
+          // task API call cheyyunnu
+      const res = await fetch(
+        "http://localhost:5000/api/task/all"
+      )
+
+          // response json aakki convert cheyyunnu
+      const data = await res.json()
+
+          // task data state-il save cheyyunnu
+      setTasks(data.tasks || [])
+
+        // error console-il show cheyyunnu
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+ 
+  // CALCULATIONS
+
+ // calculations section start cheyyunnu dashboard analytics values calculate cheyyan
+
+ // ella project budget sum cheyth total revenue calculate cheyyunnu
+  const totalRevenue = projects.reduce(
+    (acc, item) =>
+      acc + Number(item.budget || 0),
+    0
+  )
+
+  // completed status ulla projects count cheyyunnu
+  const completedProjects =
+    projects.filter(
+      (p) => p.status === "Completed"
+    ).length
+
+    // pending status ulla projects count cheyyunnu
+  const pendingProjects =
+    projects.filter(
+      (p) => p.status === "Pending"
+    ).length
+
+    // in progress status ulla projects count cheyyunnu
+  const runningProjects =
+    projects.filter(
+      (p) => p.status === "In Progress"
+    ).length
+
+    // project completion percentage calculate cheyyunnu
+  const performance =
+    projects.length > 0
+      ? Math.round(
+          (completedProjects /
+            projects.length) *
+            100
+        )
+      : 0
+
+// revenue chart-il display cheyyan sample revenue data create cheyyunnu
+const revenueData = [
+  { month: "Jan", revenue: 200 },
+  { month: "Feb", revenue: 500 },
+  { month: "Mar", revenue: 788 }
+]
+
+// pie chart-in vendi project status data create cheyyunnu
+  const pieData = [
+    {
+      name: "Completed",
+      value: completedProjects
+    },
+    {
+      name: "Pending",
+      value: pendingProjects
+    },
+    {
+      name: "Running",
+      value: runningProjects
+    }
+  ]
+
+  // task progress chart-in vendi task data map cheyyunnu
+  const salesData = tasks.map(
+    (item, index) => ({
+      name: `T${index + 1}`,
+      sales:
+        item.status === "Completed"
+          ? 100
+          : item.status === "Running"
+          ? 70
+          : 30
+    })
+  )
+
+  // pie chart colors define cheyyunnu
+  const COLORS = [
+    "#2563eb",
+    "#22c55e",
+    "#f59e0b"
+  ]
+
+  // analytics page UI render cheyyan return use cheyyunnu
+  return (
+
+      // page main container create cheyyunnu
+    <div
+      className="container-fluid"
+      style={{
+        minHeight: "100vh",
+       background: darkMode
+  ? "#020617"
+  : "#f1f5f9",
+        padding: "30px",
+        transition: "0.3s"
+      }}
+    >
+
+    {/*  top header section create cheyyunnu */}
+<div className="d-flex justify-content-between align-items-center mb-4">
+
+      {/*  left side controls container create cheyyunnu */}
+    <div className="d-flex align-items-center gap-3">
+
+              {/*  dashboard page-il thirich pokan back button create cheyyunnu */}
+            <button
+              onClick={() =>
+                navigate("/dashboard")
+              }
+              className="btn"
+              style={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "15px",
+                background: darkMode
+                  ? "#1e293b"
+                  : "#e2e8f0",
+              }}
             >
 
-                {/* LEFT */}
-
-                <div className="d-flex align-items-center gap-3">
-
-                    {/* BACK BUTTON */}
-
-                    <button
-
-                        onClick={() => navigate("/dashboard")}
-
-                        className="btn"
-
-                        style={{
-
-                            width: "55px",
-
-                            height: "55px",
-
-                            borderRadius: "18px",
-
-                            background:
-                                darkMode
-                                    ? "#0f172a"
-                                    : "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(0,0,0,0.08)"
-
-                        }}
-                    >
-
-                        <ArrowLeft
-                            color={
-                                darkMode
-                                    ? "white"
-                                    : "#0f172a"
-                            }
-                        />
-
-                    </button>
-
-
-
-                    {/* TITLE */}
-
-                    <div>
-
-                        <h2
-
-                            className="fw-bold m-0"
-
-                            style={{
-
-                                color:
-                                    darkMode
-                                        ? "white"
-                                        : "#0f172a"
-
-                            }}
-                        >
-
-                            Analytics Dashboard
-
-                        </h2>
-
-                        <p
-                            className="m-0 mt-1"
-
-                            style={{
-                                color: "#64748b"
-                            }}
-                        >
-
-                            Business growth analytics
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* RIGHT */}
-
-                <div className="d-flex align-items-center gap-3">
-
-                    {/* SEARCH */}
-
-                    <div
-
-                        className="position-relative"
-
-                        style={{
-                            width: "300px",
-                            color:
-                                darkMode
-                                    ? "white"
-                                    : "#0f172a",
-                        }}
-                    >
-
-                        <Search
-
-                            size={18}
-
-                            style={{
-                            
-                                position: "absolute",
-
-                                top: "16px",
-
-                                left: "15px",
-
-                                color: "#64748b"
-
-                            }}
-                        />
-
-
-
-                        <input
-
-                            type="text"
-
-                            placeholder="Search analytics..."
-
-                            className="form-control border-0"
-
-                            style={{
-
-                                background:
-                                    darkMode
-                                        ? "white"
-                                        : "white",
-
-                                color:
-                                    darkMode
-                                        ?"white"
-                                        :  "white",
-
-                                borderRadius: "18px",
-
-                                padding:
-                                    "14px 14px 14px 45px",
-
-                                boxShadow:
-                                    "0 10px 30px rgba(0,0,0,0.08)"
-
-                            }}
-                        />
-
-                    </div>
-
-
-
-                    {/* DARK MODE */}
-
-                    <DarkModeToggle
-                        darkMode={darkMode}
-                        setDarkMode={setDarkMode}
-                    />
-
-
-
-                    {/* NOTIFICATION */}
-
-                    <div
-
-                        className="d-flex justify-content-center align-items-center"
-
-                        style={{
-
-                            width: "55px",
-
-                            height: "55px",
-
-                            borderRadius: "18px",
-
-                            background:
-                                darkMode
-                                    ? "#0f172a"
-                                    : "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(0,0,0,0.08)"
-
-                        }}
-                    >
-
-                        <Bell
-                            color={
-                                darkMode
-                                    ? "white"
-                                    : "#0f172a"
-                            }
-                        />
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {/* ============================================
-            TOP CARDS
-            ============================================ */}
-
-            <div className="row mb-4">
-
-
-
-                {/* CARD 1 */}
-
-                <div className="col-lg-3 col-md-6 mb-4">
-
-                    <div
-
-                        className="p-4"
-
-                        style={{
-
-                            borderRadius: "30px",
-
-                            background:
-                                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                            color: "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(37,99,235,0.3)"
-
-                        }}
-                    >
-
-                        <div className="d-flex justify-content-between align-items-center">
-
-                            <div>
-
-                                <p className="m-0">
-                                    Total Revenue
-                                </p>
-
-                                <h1 className="fw-bold mt-2">
-                                    $45K
-                                </h1>
-
-                            </div>
-
-
-
-                            <DollarSign size={45} />
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* CARD 2 */}
-
-                <div className="col-lg-3 col-md-6 mb-4">
-
-                    <div
-
-                        className="p-4"
-
-                        style={{
-
-                            borderRadius: "30px",
-
-                            background:
-                                "linear-gradient(to right,#16a34a,#22c55e)",
-
-                            color: "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(34,197,94,0.3)"
-
-                        }}
-                    >
-
-                        <div className="d-flex justify-content-between align-items-center">
-
-                            <div>
-
-                                <p className="m-0">
-                                    Growth
-                                </p>
-
-                                <h1 className="fw-bold mt-2">
-                                    +28%
-                                </h1>
-
-                            </div>
-
-
-
-                            <TrendingUp size={45} />
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* CARD 3 */}
-
-                <div className="col-lg-3 col-md-6 mb-4">
-
-                    <div
-
-                        className="p-4"
-
-                        style={{
-
-                            borderRadius: "30px",
-
-                            background:
-                                "linear-gradient(to right,#f59e0b,#facc15)",
-
-                            color: "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(245,158,11,0.3)"
-
-                        }}
-                    >
-
-                        <div className="d-flex justify-content-between align-items-center">
-
-                            <div>
-
-                                <p className="m-0">
-                                    Active Users
-                                </p>
-
-                                <h1 className="fw-bold mt-2">
-                                    1,240
-                                </h1>
-
-                            </div>
-
-
-
-                            <Users size={45} />
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* CARD 4 */}
-
-                <div className="col-lg-3 col-md-6 mb-4">
-
-                    <div
-
-                        className="p-4"
-
-                        style={{
-
-                            borderRadius: "30px",
-
-                            background:
-                                "linear-gradient(to right,#7c3aed,#8b5cf6)",
-
-                            color: "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(124,58,237,0.3)"
-
-                        }}
-                    >
-
-                        <div className="d-flex justify-content-between align-items-center">
-
-                            <div>
-
-                                <p className="m-0">
-                                    Performance
-                                </p>
-
-                                <h1 className="fw-bold mt-2">
-                                    89%
-                                </h1>
-
-                            </div>
-
-
-
-                            <Activity size={45} />
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {/* ============================================
-            CHARTS SECTION
-            ============================================ */}
-
-            <div className="row">
-
-
-
-                {/* REVENUE CHART */}
-
-                <div className="col-lg-8 mb-4">
-
-                    <div
-
-                        className="p-4"
-
-                        style={{
-
-                            borderRadius: "35px",
-
-                            background:
-                                darkMode
-                                    ? "#0f172a"
-                                    : "rgba(255,255,255,0.7)",
-
-                            backdropFilter: "blur(10px)",
-
-                            boxShadow:
-                                "0 10px 30px rgba(0,0,0,0.08)"
-
-                        }}
-                    >
-
-                        <div className="d-flex justify-content-between align-items-center mb-4">
-
-                            <div>
-
-                                <h4
-
-                                    className="fw-bold"
-
-                                    style={{
-
-                                        color:
-                                            darkMode
-                                                ? "white"
-                                                : "#0f172a"
-
-                                    }}
-                                >
-
-                                    Revenue Analytics
-
-                                </h4>
-
-                                <p style={{ color: "#64748b" }}>
-                                    Monthly revenue growth
-                                </p>
-
-                            </div>
-
-
-
-                            <BarChart3 color="#2563eb" />
-
-                        </div>
-
-
-
-                        {/* CHART */}
-
-                        <div style={{ width: "100%", height: "350px" }}>
-
-                            <ResponsiveContainer>
-
-{/* chart creating part  */}
-{/* array full chartilki povm */}
-                                <AreaChart data={revenueData}>
-
-                                    <defs>
-
-                                        <linearGradient
-                                            id="colorRevenue"
-                                            x1="0"
-                                            y1="0"
-                                            x2="0"
-                                            y2="1"
-                                        >
-
-                                            <stop
-                                                offset="5%"
-                                                stopColor="#2563eb"
-                                                stopOpacity={0.8}
-                                            />
-
-                                            <stop
-                                                offset="95%"
-                                                stopColor="#2563eb"
-                                                stopOpacity={0}
-                                            />
-
-                                        </linearGradient>
-
-                                    </defs>
-
-
-{/* month kaanikm x axisil */}
-                                    <XAxis dataKey="month" />
-
-
-
-                                    <Tooltip />
-
-{/* values edth graph draw chyum */}
-{/* animation control chyn pattum */}
-                                    <Area
-
-                                        type="monotone"
-
-                                        dataKey="revenue"
-
-                                        stroke="#2563eb"
-
-                                        fillOpacity={1}
-
-                                        // graphil blue shade varan
-                                        fill="url(#colorRevenue)"
-
-                                        // animation control
-                                        animationDuration={2000}
-                                        animationEasing="ease-in-out"
-                                    />
-
-                                </AreaChart>
-
-                            </ResponsiveContainer>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* PIE CHART */}
-
-                <div className="col-lg-4 mb-4">
-
-                    <div
-
-                        className="p-4 h-100"
-
-                        style={{
-
-                            borderRadius: "35px",
-
-                            background:
-                                darkMode
-                                    ? "#0f172a"
-                                    : "rgba(255,255,255,0.7)",
-
-                            backdropFilter: "blur(10px)",
-
-                            boxShadow:
-                                "0 10px 30px rgba(0,0,0,0.08)"
-
-                        }}
-                    >
-
-                        <h4
-
-                            className="fw-bold mb-4"
-
-                            style={{
-
-                                color:
-                                    darkMode
-                                        ? "white"
-                                        : "#0f172a"
-
-                            }}
-                        >
-
-                            Project Status
-
-                        </h4>
-
-
-
-                        {/* PIE */}
-
-                        <div style={{ width: "100%", height: "300px" }}>
-
-                            <ResponsiveContainer>
-
-                                <PieChart>
-
-                                    <Pie
-
-                                        data={pieData}
-
-                                        innerRadius={70}
-
-                                        outerRadius={100}
-
-                                        paddingAngle={5}
-
-                                        dataKey="value"
-
-                                    >
-
-                                        {pieData.map((entry, index) => (
-
-                                            <Cell
-                                                key={index}
-                                                fill={COLORS[index]}
-                                            />
-
-                                        ))}
-
-                                    </Pie>
-
-
-
-                                    <Tooltip />
-
-                                </PieChart>
-
-                            </ResponsiveContainer>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {/* ============================================
-            BOTTOM CHART
-            ============================================ */}
-
-            <div
-
-                className="p-4"
-
-                style={{
-
-                    borderRadius: "35px",
-
-                    background:
-                        darkMode
-                            ? "#0f172a"
-                            : "rgba(255,255,255,0.7)",
-
-                    backdropFilter: "blur(10px)",
-
-                    boxShadow:
-                        "0 10px 30px rgba(0,0,0,0.08)"
-
-                }}
-            >
-
-                <h4
-
-                    className="fw-bold mb-4"
-
-                    style={{
-
-                        color:
-                            darkMode
-                                ? "white"
-                                : "#0f172a"
-
-                    }}
-                >
-
-                    Weekly Sales
-
-                </h4>
-
-
-
-                {/* BAR CHART */}
-
-                <div style={{ width: "100%", height: "350px" }}>
-
-                    <ResponsiveContainer>
-
-                        <BarChart data={salesData}>
-
-
-                            <XAxis dataKey="name" />
-
-                            <Tooltip />
-
-
-
-                            <Bar
-                                dataKey="sales"
-                                fill="#2563eb"
-                                radius={[10, 10, 0, 0]}
-                            />
-
-                        </BarChart>
-
-                    </ResponsiveContainer>
-
-                </div>
-
-            </div>
+                        {/*  back arrow icon show cheyyunnu */}
+
+              <ArrowLeft
+                color={
+                  darkMode
+                    ? "white"
+                    : "#0f172a"
+                }
+              />
+            </button>
+  
+                {/*  total tasks count display cheyyunnu */}
+     <h2  className="fw-bold ms-5 position-relative"  style={{
+    color: darkMode ? "white" : "#7b2132"
+  }}>
+    Total Tasks: {tasks.length}
+  </h2>
+
+  </div>
+
+        {/* // dark mode toggle component render cheyyunnu */}
+  <DarkModeToggle
+    darkMode={darkMode}
+    setDarkMode={setDarkMode}
+  />
+
+</div>
+
+    {/* // analytics page heading section create cheyyunnu */}
+<div className="mb-4">
+
+        {/*  main heading */}
+  <h2 className="fw-bold"   style={{
+    color: darkMode ? "white" : "#0f172a"
+  }}>
+    Dashboard Analytics
+  </h2>
+
+
+      {/*  welcome text   */}
+  <p className="text-secondary"  style={{
+    color: darkMode ? "#94a3b8" : "#64748b"
+  }}>
+    Welcome Back 👋
+  </p>
+
+</div>
+
+
+{/* TOP CARDS */}
+
+    {/*  top cards section start cheyyunnu analytics summary display cheyyan */}
+<div className="row mb-4">
+
+  {/* total revenue card column create cheyyunnu */}
+  <div className="col-lg-3 col-md-6 mb-4">
+
+    {/*  revenue card create cheyyunnu */}
+    <div
+      className="p-4 card-hover"
+      onClick={() => navigate("/projects")}
+      style={{
+        borderRadius: "30px",
+        background:
+          "linear-gradient(to right,#2563eb,#3b82f6)",
+        color: "white",
+          transition: "0.3s",
+    cursor: "pointer"
+      }}
+    >
+
+      {/*  revenue card content align cheyyunnu */}
+      <div className="d-flex justify-content-between align-items-center">
+
+
+        {/*  revenue details container create cheyyunnu */}
+        <div>
+
+          {/*  revenue title show cheyyunnu */}
+          <p className="m-0">
+            Total Revenue
+          </p>
+
+          {/*  total revenue amount display cheyyunnu */}
+          <h1 className="fw-bold mt-2">
+            ₹{totalRevenue.toLocaleString()}
+          </h1>
 
         </div>
 
-    )
+        {/*  revenue icon show cheyyunnu */}
+        <DollarSign size={45} />
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* CUSTOMERS */}
+
+  {/* customers card column create cheyyunnu */}
+  <div className="col-lg-3 col-md-6 mb-4">
+
+    {/*  customers card create cheyyunnu */}
+    <div
+      className="p-4 card-hover"
+      onClick={() => navigate("/customers")}
+      style={{
+        borderRadius: "30px",
+        background:
+          "linear-gradient(to right,#16a34a,#22c55e)",
+        color: "white",
+         transition: "0.3s",
+    cursor: "pointer"
+      }}
+    >
+
+      {/*  customer card content align cheyyunnu */}
+      <div className="d-flex justify-content-between align-items-center">
+
+        {/*  customer details container create cheyyunnu */}
+        <div>
+
+          {/*  customer title show cheyyunnu */}
+          <p className="m-0">
+            Customers
+          </p>
+
+          {/*  customer count display cheyyunnu */}
+          <h1 className="fw-bold mt-2">
+            {customers.length}
+          </h1>
+
+        </div>
+
+        {/*  customers icon show cheyyunnu */}
+        <Users size={45} />
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* PROJECTS */}
+
+  {/*  projects card column create cheyyunnu */}
+  <div className="col-lg-3 col-md-6 mb-4">
+
+    {/*  projects card create cheyyunnu */}
+<div
+  className="p-4 card-hover"
+  onClick={() => navigate("/projects")}
+  style={{
+    borderRadius: "30px",
+    background:
+      "linear-gradient(to right,#f59e0b,#facc15)",
+    color: "white",
+    transition: "0.3s",
+    cursor: "pointer"
+  }}
+>
+
+      {/*  project card content align cheyyunnu */}
+      <div className="d-flex justify-content-between align-items-center">
+
+        {/*  project details container create cheyyunnu */}
+        <div>
+
+          {/*  project title show cheyyunnu */}
+          <p className="m-0">
+            Projects
+          </p>
+
+          {/*  project count display cheyyunnu */}
+          <h1 className="fw-bold mt-2">
+            {projects.length}
+          </h1>
+
+        </div>
+
+        {/*  projects icon show cheyyunnu */}
+        <Activity size={45} />
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* PERFORMANCE */}
+
+  {/*  performance card column create cheyyunnu */}
+  <div className="col-lg-3 col-md-6 mb-4">
+
+    {/*  performance card create cheyyunnu */}
+    <div
+      className="p-4 card-hover"
+     onClick={() => navigate("/tasks")}
+      style={{
+        borderRadius: "30px",
+        background:
+          "linear-gradient(to right,#7c3aed,#8b5cf6)",
+        color: "white",
+          transition: "0.3s",
+    cursor: "pointer"
+      }}
+    >
+
+      {/*  performance card content align cheyyunnu */}
+      <div className="d-flex justify-content-between align-items-center">
+
+                {/*  performance details container create cheyyunnu */}
+        <div>
+
+{/*  performance title show cheyyunnu */}
+          <p className="m-0">
+            Performance
+          </p>
+
+          {/*  performance percentage display cheyyunnu */}
+          <h1 className="fw-bold mt-2">
+            {performance}%
+          </h1>
+
+        </div>
+
+        {/*  performance icon show cheyyunnu */}
+        <TrendingUp size={45} />
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{/* CHARTS SECTION */}
+
+{/*  charts section start cheyyunnu analytics graphs display cheyyan */}
+<div className="row">
+
+     {/* revenue chart column create cheyyunnu */}
+  <div className="col-lg-8 mb-4">
+
+    {/*  revenue chart card create cheyyunnu */}
+    <div
+      className="p-4"
+      style={{
+        borderRadius: "35px",
+        background: darkMode
+          ? "#0f172a"
+          : "rgba(255,255,255,0.7)",
+        backdropFilter: "blur(10px)",
+        boxShadow:
+          "0 10px 30px rgba(0,0,0,0.08)"
+      }}
+    >
+
+      {/* revenue chart header container create cheyyunnu */}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+
+</div>
+
+
+      {/*  revenue chart title section create cheyyunnu */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+
+
+        {/* chart heading container create cheyyunnu */}
+        <div>
+
+          {/*  revenue analytics title show cheyyunnu */}
+          <h4
+            className="fw-bold"
+            style={{
+              color: darkMode
+                ? "white"
+                : "#0f172a"
+            }}
+          >
+            Revenue Analytics
+          </h4>
+
+          {/*  revenue analytics description show cheyyunnu */}
+          <p style={{ color: "#64748b" }}>
+            Project revenue overview
+          </p>
+
+        </div>
+
+        {/*  chart icon show cheyyunnu */}
+        <BarChart3 color="#2563eb" />
+
+      </div>
+
+      {/*  chart wrapper create cheyyunnu */}
+    <div
+  style={{
+    width: "100%",
+    height: "350px",
+    minWidth: 0
+  }}
+>
+
+        {/*  tasks illenkil message show cheyyunnu */}
+       {
+  tasks.length === 0 ? (
+    <h5 className="text-center">
+      No Tasks Found
+    </h5>
+  ) : (
+
+                // responsive chart container create cheyyunnu
+    <ResponsiveContainer width="100%" height={350}>
+
+              {/* // area chart create cheyyunnu */}
+          <AreaChart data={revenueData}>
+
+                {/* // chart gradient define cheyyunnu */}
+            <defs>
+
+              <linearGradient
+                id="colorRevenue"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+
+                    {/* // gradient top color set cheyyunnu */}
+                <stop
+                  offset="5%"
+                  stopColor="#2563eb"
+                  stopOpacity={0.8}
+                />
+
+                    {/* // gradient bottom color set cheyyunnu */}
+                <stop
+                  offset="95%"
+                  stopColor="#2563eb"
+                  stopOpacity={0}
+                />
+
+              </linearGradient>
+
+            </defs>
+
+                {/* // x axis create cheyyunnu */}
+            <XAxis dataKey="month" />
+
+                {/* // tooltip enable cheyyunnu */}
+            <Tooltip />
+
+                {/* // area graph create cheyyunnu */}
+            <Area
+              type="monotone"
+              dataKey="revenue"
+              stroke="#2563eb"
+              fillOpacity={1}
+              fill="url(#colorRevenue)"
+            />
+
+          </AreaChart>
+
+        </ResponsiveContainer>
+  )
+}
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* PIE CHART */}
+  {/* // pie chart column create cheyyunnu */}
+  <div className="col-lg-4 mb-4">
+
+    {/* // pie chart card create cheyyunnu */}
+    <div
+      className="p-4 h-100"
+      style={{
+        borderRadius: "35px",
+        background: darkMode
+          ? "#0f172a"
+          : "rgba(255,255,255,0.7)",
+        backdropFilter: "blur(10px)",
+        boxShadow:
+          "0 10px 30px rgba(0,0,0,0.08)"
+      }}
+    >
+
+      {/* // pie chart heading show cheyyunnu */}
+      <h4
+        className="fw-bold mb-4"
+        style={{
+          color: darkMode
+            ? "white"
+            : "#0f172a"
+        }}
+      >
+        Project Status
+      </h4>
+
+      {/* // pie chart wrapper create cheyyunnu */}
+    <div
+  style={{
+    width: "100%",
+    height: "300px",
+    minWidth: 0
+  }}
+>
+
+  {/* // tasks illenkil message show cheyyunnu */}
+{tasks.length === 0 ? (
+  <h5 className="text-center">
+    No Tasks Found
+  </h5>
+) : (
+
+      // responsive pie chart container create cheyyunnu
+        <ResponsiveContainer width="100%" height={300} > 
+
+      {/* // pie chart create cheyyunnu */}
+          <PieChart>
+
+        {/* // project status pie graph create cheyyunnu */}
+<Pie
+  data={pieData}
+  cx="50%"
+  cy="50%"
+  innerRadius={70}
+  outerRadius={100}
+   label
+  dataKey="value"
+>
+
+            {/* // pie chart colors apply cheyyunnu */}
+  {pieData.map((entry, index) => (
+    <Cell
+      key={index}
+      fill={COLORS[index]}
+    />
+  ))}
+</Pie>
+            
+                    {/* // tooltip enable cheyyunnu */}
+            <Tooltip />
+
+          </PieChart>
+
+        </ResponsiveContainer>
+
+
+        )}
+
+  {/* // project status summary display cheyyunnu */}
+<div className="mt-3"style={{
+    color: darkMode ? "#94a3b8" : "#64748b"
+  }}>
+  <p >🟢 Completed : {completedProjects}</p>
+  <p>🟡 Pending : {pendingProjects}</p>
+  <p>🔵 Running : {runningProjects}</p>
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+{/* BOTTOM CHART */}
+{/* // bottom chart card create cheyyunnu */}
+
+<div
+  className="p-4"
+  style={{
+    borderRadius: "35px",
+    background: darkMode
+      ? "#0f172a"
+      : "rgba(255,255,255,0.7)",
+    backdropFilter: "blur(10px)",
+    boxShadow:
+      "0 10px 30px rgba(0,0,0,0.08)"
+  }}
+>
+
+  {/* // task progress heading show cheyyunnu */}
+  <h4
+    className="fw-bold mb-4"
+    style={{
+      color: darkMode
+        ? "white"
+        : "#0f172a"
+    }}
+  >
+    Task Progress
+  </h4>
+
+  {/* // bar chart wrapper create cheyyunnu */}
+<div
+  style={{
+    width: "100%",
+    height: "350px",
+    minWidth: 0
+  }}
+>
+
+    {/* // tasks illenkil message show cheyyunnu */}
+{
+  tasks.length === 0 ? (
+    <h5 className="text-center">
+      No Tasks Found
+    </h5>
+  ) : (
+
+            // responsive bar chart container create cheyyunnu
+    <ResponsiveContainer width="100%" height={350}>
+                {/* bar chart create cheyyunnu */}
+      <BarChart data={salesData}>
+                    {/*  x axis create cheyyunnu */}
+        <XAxis dataKey="name" />
+                    {/*  tooltip enable cheyyunnu */}
+        <Tooltip />
+                    {/*  task progress bars create cheyyunnu */}
+        <Bar
+          dataKey="sales"
+          fill="#2563eb"
+          radius={[10,10,0,0]}
+        />
+      </BarChart>
+    </ResponsiveContainer>
+  )
+}
+
+  </div>
+
+</div>
+
+</div>
+
+)
 
 }
 

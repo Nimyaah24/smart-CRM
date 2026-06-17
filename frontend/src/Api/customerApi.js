@@ -1,25 +1,23 @@
 
 
-// backend url
-const baseURL =
-    "http://localhost:5000/api/customer"
+// customer API base URL store cheyyunnu
+const baseURL = "http://localhost:5000/api/customer"
 
-
-// GET CUSTOMERS
-
+// ella customers fetch cheyyan GET API function create cheyyunnu
 export const getCustomers = async () => {
-    const res = await fetch(`${baseURL}/all`, { credentials: "include" }
-    )
+
+    // backend-il ninn customer data fetch cheyyunnu
+    const res = await fetch(`${baseURL}/all`, { credentials: "include" })
+
+    // response JSON aayi return cheyyunnu
     return res.json()
 }
 
-
-// ADD CUSTOMER
-
+// new customer add cheyyan POST API function create cheyyunnu
 export const addCustomer = async (data) => {
 
+    // customer data backend-il save cheyyan request ayakkunnu
     const res = await fetch(`${baseURL}/add`,
-
         {
             method: "POST",
             headers: {
@@ -29,32 +27,30 @@ export const addCustomer = async (data) => {
             body: JSON.stringify(data)
         }
     )
-    return res.json()
 
+    // response JSON aayi return cheyyunnu
+    return res.json()
 }
 
-
-// DELETE CUSTOMER
-
+// customer delete cheyyan DELETE API function create cheyyunnu
 export const deleteCustomer = async (id) => {
 
+    // selected customer delete cheyyan request ayakkunnu
     const res = await fetch(`${baseURL}/delete/${id}`,
         {
             method: "DELETE",
             credentials: "include"
         }
-
     )
 
+    // response JSON aayi return cheyyunnu
     return res.json()
-
 }
 
-
-// UPDATE CUSTOMER
-
+// customer update cheyyan PUT API function create cheyyunnu
 export const updateCustomer = async (id, data) => {
 
+    // updated customer data backend-il save cheyyan request ayakkunnu
     const res = await fetch(`${baseURL}/update/${id}`,
         {
             method: "PUT",
@@ -64,9 +60,8 @@ export const updateCustomer = async (id, data) => {
             credentials: "include",
             body: JSON.stringify(data)
         }
-
     )
 
+    // response JSON aayi return cheyyunnu
     return res.json()
-
 }

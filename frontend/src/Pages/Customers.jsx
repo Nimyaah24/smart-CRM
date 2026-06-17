@@ -1,1086 +1,880 @@
-/*
-========================================
-IMPORTS
-========================================
-*/
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import DarkModeToggle from "../components/DarkModeToggle";
 
-// react hooks
-import { useEffect, useState } from "react"
 
-// react router
-import { useNavigate } from "react-router-dom"
-
-// dark mode component
-import DarkModeToggle from "../components/DarkModeToggle"
-
-// icons
 import {
-    Users,
-    Search,
-    Plus,
-    Pencil,
-    Trash2,
-    Mail,
-    Phone,
-    MapPin,
-    ArrowLeft
-} from "lucide-react"
-
-
-
-/*
-========================================
-CUSTOMERS COMPONENT
-========================================
-*/
+  Search,
+  Pencil,
+  Trash2,
+  Mail,
+  Phone,
+  MapPin,
+  ArrowLeft,
+    Bell
+} from "lucide-react";
 
 const Customers = () => {
+  const navigate = useNavigate();
 
-    /*
-    ========================================
-    NAVIGATION
-    ========================================
-    */
+  const [darkMode, setDarkMode] = useState(
+  JSON.parse(localStorage.getItem("darkMode")) || false
+);
 
-    const navigate = useNavigate()
+useEffect(() => {
+  localStorage.setItem(
+    "darkMode",
+    JSON.stringify(darkMode)
+  );
+}, [darkMode]);
 
+  const [customers, setCustomers] = useState([]);
 
+  const [loading, setLoading] = useState(true);
 
-    /*
-    ========================================
-    DARK MODE STATE
-    ========================================
-    */
+  const [search, setSearch] = useState("");
 
-    const [darkMode, setDarkMode] = useState(false)
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+  });
 
+  const [editId, setEditId] = useState(null);
 
+const [showModal, setShowModal] =
+  useState(false);
 
-    /*
-    ========================================
-    CUSTOMER STATE
-    ========================================
-    */
+  const fetchCustomers = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/customer/all",
+        {
+          credentials: "include",
+        }
+      );
 
-    const [customers, setCustomers] = useState([])
+      const data = await res.json();
 
+      setCustomers(data.customers || []);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
 
-    /*
-    ========================================
-    SEARCH STATE
-    ========================================
-    */
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const [search, setSearch] = useState("")
+  const addCustomer = async () => {
+    if (
+      !form.name ||
+      !form.email ||
+      !form.phone ||
+      !form.location
+    ) {
+    toast.error("Please fill all fields");
+      return;
+    }
 
+    try {
+      await fetch(
+        "http://localhost:5000/api/customer/add",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(form),
+        }
+      );
+toast.success("Customer Added Successfully");
+      fetchCustomers();
 
-
-    /*
-    ========================================
-    FORM STATE
-    ========================================
-    */
-
-    const [form, setForm] = useState({
-
+      setForm({
         name: "",
         email: "",
         phone: "",
-        location: ""
+        location: "",
+      });
+      const notifications =
+  JSON.parse(
+    localStorage.getItem("notifications")
+  ) || [];
 
-    })
+notifications.unshift({
+  id: Date.now(),
+  title: "Customer Created",
+  message: `${form.name} was added to CRM`,
+  time: "Just now",
+  type: "success",
+  unread: true,
+});
 
-
-
-    /*
-    ========================================
-    EDIT ID STATE
-    ========================================
-    */
-
-    const [editId, setEditId] = useState(null)
-
-
-
-    /*
-    ========================================
-    FETCH CUSTOMERS
-    ========================================
-    */
-
-    const fetchCustomers = async () => {
-
-        try {
-
-            // api call
-            const res = await fetch(
-                "http://localhost:5000/api/customer/get",
-                {
-                    credentials: "include"
-                }
-            )
-
-            // response convert json
-            const data = await res.json()
-
-            // store customer data
-            setCustomers(data.customers)
-
-        }
-
-        catch (err) {
-
-            console.log(err)
-
-        }
-
+localStorage.setItem(
+  "notifications",
+  JSON.stringify(notifications)
+);
+    } catch (err) {
+      console.log(err);
     }
+  };
 
+  const deleteCustomer = async (id) => {
+    const ok = window.confirm(
+      "Delete this customer?"
+    );
 
+    if (!ok) return;
 
-    /*
-    ========================================
-    COMPONENT LOAD
-    ========================================
-    */
+    try {
+      await fetch(
+        `http://localhost:5000/api/customer/delete/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+toast.success("Customer Deleted");
 
-    useEffect(() => {
+const notifications =
+  JSON.parse(
+    localStorage.getItem("notifications")
+  ) || [];
 
-        fetchCustomers()
+notifications.unshift({
+  id: Date.now(),
+  title: "Customer Deleted",
+  message: "A customer was removed",
+  time: "Just now",
+  type: "warning",
+  unread: true,
+});
 
-    }, [])
+localStorage.setItem(
+  "notifications",
+  JSON.stringify(notifications)
+);
 
-
-
-    /*
-    ========================================
-    INPUT CHANGE
-    ========================================
-    */
-
-    const handleChange = (e) => {
-
-        setForm({
-
-            ...form,
-
-            [e.target.name]: e.target.value
-
-        })
-
+fetchCustomers();
+    } catch (err) {
+      console.log(err);
     }
-
-
-
-    /*
-    ========================================
-    ADD CUSTOMER
-    ========================================
-    */
-
-    const addCustomer = async () => {
-
-        try {
-
-            await fetch(
-                "http://localhost:5000/api/customer/add",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    credentials: "include",
-
-                    body: JSON.stringify(form)
-
-                }
-            )
-
-            // refresh customers
-            fetchCustomers()
-
-            // clear form
-            setForm({
-
-                name: "",
-                email: "",
-                phone: "",
-                location: ""
-
-            })
-
-        }
-
-        catch (err) {
-
-            console.log(err)
-
-        }
-
-    }
-
-
-
-    /*
-    ========================================
-    DELETE CUSTOMER
-    ========================================
-    */
-
-    const deleteCustomer = async (id) => {
-
-        try {
-
-            await fetch(
-                `http://localhost:5000/api/customer/delete/${id}`,
-                {
-
-                    method: "DELETE",
-
-                    credentials: "include"
-
-                }
-            )
-
-            // refresh customers
-            fetchCustomers()
-
-        }
-
-        catch (err) {
-
-            console.log(err)
-
-        }
-
-    }
-
-
-
-    /*
-    ========================================
-    EDIT BUTTON CLICK
-    ========================================
-    */
-
-    const editCustomer = (item) => {
-
-        // store edit id
-        setEditId(item._id)
-
-        // set form values
-        setForm({
-
-            name: item.name,
-            email: item.email,
-            phone: item.phone,
-            location: item.location
-
-        })
-
-    }
-
-
-
-    /*
-    ========================================
-    UPDATE CUSTOMER
-    ========================================
-    */
-
-    const updateCustomer = async () => {
-
-        try {
-
-            await fetch(
-                `http://localhost:5000/api/customer/update/${editId}`,
-                {
-
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    credentials: "include",
-
-                    body: JSON.stringify(form)
-
-                }
-            )
-
-            // refresh customer
-            fetchCustomers()
-
-            // clear form
-            setForm({
-
-                name: "",
-                email: "",
-                phone: "",
-                location: ""
-
-            })
-
-            // remove edit id
-            setEditId(null)
-
-        }
-
-        catch (err) {
-
-            console.log(err)
-
-        }
-
-    }
-
-
-
-    /*
-    ========================================
-    SEARCH FILTER
-    ========================================
-    */
-
-    const filteredCustomers = customers.filter((item) =>
-
-        item.name.toLowerCase().includes(search.toLowerCase())
-
-    )
-
-
-
+  };
+
+  const editCustomer = (item) => {
+    setEditId(item._id);
+
+    setForm({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      location: item.location,
+    });
+  };
+
+const updateCustomer = async () => {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/customer/update/${editId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(form),
+      }
+    );
+
+    toast.success("Customer Updated Successfully");
+    const data = await res.json();
+
+const notifications =
+  JSON.parse(
+    localStorage.getItem("notifications")
+  ) || [];
+
+notifications.unshift({
+  id: Date.now(),
+  title: "Customer Updated",
+  message: `${form.name} details updated`,
+  time: "Just now",
+  type: "warning",
+  unread: true,
+});
+
+localStorage.setItem(
+  "notifications",
+  JSON.stringify(notifications)
+);
+
+    console.log("UPDATE RESPONSE =", data);
+
+    fetchCustomers();
+  } catch (err) {
+    console.log(err);
+    toast.error("Something went wrong");
+  }
+};
+
+  const filteredCustomers = customers.filter(
+    (item) =>
+      item?.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase())
+  );
+
+  if (loading) {
     return (
+      <div className="container py-5 text-center">
+        <h2>Loading Customers...</h2>
+      </div>
+    );
+  }
 
-        /*
-        ========================================
-        MAIN CONTAINER
-        ========================================
-        */
+  return (
+    
+  <div
+    className="container-fluid"
+    style={{
+      minHeight: "100vh",
+      background: darkMode
+        ? "#020617"
+        : "#f1f5f9",
+      padding: "30px",
+    }}
+  >
+
+
+
+          {/* TOP NAVBAR */}
+
+      <div
+        className="d-flex justify-content-between align-items-center mb-4 p-4 flex-wrap gap-3"
+        style={{
+          borderRadius: "28px",
+          background: darkMode
+            ? "rgba(15,23,42,0.9)"
+            : "rgba(255,255,255,0.9)",
+          backdropFilter: "blur(10px)",
+          boxShadow:
+            "0 10px 30px rgba(0,0,0,0.08)",
+        }}
+      >
+        {/* LEFT */}
+
+        <div className="d-flex align-items-center gap-3">
+          <button
+            onClick={() =>
+              navigate("/dashboard")
+            }
+            className="btn"
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "15px",
+              background: darkMode
+                ? "#1e293b"
+                : "#e2e8f0",
+            }}
+          >
+            <ArrowLeft
+              color={
+                darkMode
+                  ? "white"
+                  : "#0f172a"
+              }
+            />
+          </button>
+
+          <div>
+            <h2
+              className="fw-bold m-0"
+              style={{
+                color: darkMode
+                  ? "white"
+                  : "#0f172a",
+              }}
+            >
+              Customers
+            </h2>
+
+            <p
+              className="m-0 mt-1"
+              style={{
+                color: darkMode
+                  ? "#94a3b8"
+                  : "#64748b",
+              }}
+            >
+              Manage all your clients
+            </p>
+          </div>
+        </div>
+
+        {/* SEARCH */}
 
         <div
-            className="container-fluid"
-            style={{
-
-                minHeight: "100vh",
-
-                background: darkMode
-                    ? "#020617"
-                    : "#f1f5f9",
-
-                padding: "30px",
-
-                transition: "0.3s"
-
-            }}
+          className="d-flex align-items-center px-4"
+          style={{
+            width: "100%",
+            maxWidth: "500px",
+            height: "70px",
+            borderRadius: "22px",
+            background: darkMode
+                  ? "#1e293b"
+                  : "white",
+                color: darkMode
+                  ? "white"
+                  : "#0f172a",
+            boxShadow:
+              "0 10px 30px rgba(0,0,0,0.08)",
+          }}
         >
-
-
-
-            {/*
-            ========================================
-            TOP NAVBAR
-            ========================================
-            */}
-
-            <div
-                className="d-flex justify-content-between align-items-center mb-4 p-4"
-
-                style={{
-
-                    borderRadius: "28px",
-
-                    background: darkMode
-                        ? "rgba(15,23,42,0.9)"
-                        : "rgba(255,255,255,0.9)",
-
-                    backdropFilter: "blur(10px)",
-
-                    boxShadow:
-                        "0 10px 30px rgba(0,0,0,0.08)"
-
-                }}
-            >
-
-
-
-                {/* LEFT */}
-                <div className="d-flex align-items-center gap-3">
-
-                    {/* BACK BUTTON */}
-                    <button
-                        onClick={() => navigate("/dashboard")}
-                        className="btn"
-                        style={{
-
-                            width: "50px",
-
-                            height: "50px",
-
-                            borderRadius: "15px",
-
-                            background: darkMode
-                                ? "#1e293b"
-                                : "#e2e8f0"
-
-                        }}
-                    >
-
-                        <ArrowLeft
-                            color={darkMode ? "white" : "#0f172a"}
-                        />
-
-                    </button>
-
-
-
-                    {/* TITLE */}
-                    <div>
-
-                        <h2
-                            className="fw-bold m-0"
-
-                            style={{
-
-                                color: darkMode
-                                    ? "white"
-                                    : "#0f172a"
-
-                            }}
-                        >
-
-                            Customers
-
-                        </h2>
-
-                        <p
-                            className="m-0 mt-1"
-
-                            style={{
-
-                                color: darkMode
-                                    ? "#94a3b8"
-                                    : "#64748b"
-
-                            }}
-                        >
-
-                            Manage all your clients
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                {/* RIGHT */}
-
-                
-                {/* SEARCH */}
-                <div className="col-lg-8 mb-3 ">
-
-                    <div
-                        className="d-flex align-items-center px-4"
-
-                        style={{
-
-                            height: "70px",
-
-                            borderRadius: "22px",
-
-                            marginLeft:"700px",
-                            background: darkMode
-                                ? "#0f172a"
-                                : "white",
-
-                            boxShadow:
-                                "0 10px 30px rgba(0,0,0,0.08)"
-
-                        }}
-                    >
-
-                        <Search
-                            color="#64748b"
-                        />
-
-
-
-                        <input
-                            type="text"
-
-                            placeholder="Search customer..."
-
-                            className="form-control border-0 shadow-none ms-3"
-
-                            value={search}
-
-                            onChange={(e) =>
-                                setSearch(e.target.value)
-                            }
-
-                            style={{
-
-                                background: "transparent",
-
-                                color: darkMode
-                                    ? "white"
-                                    : "#0f172a"
-
-                            }}
-                        />
-
-                    </div>
-
-                </div>
-                <DarkModeToggle
-                    darkMode={darkMode}
-                    setDarkMode={setDarkMode}
-                />
-
-            </div>
-
-
-
-            {/*
-            ========================================
-            TOP SECTION
-            ========================================
-            */}
-
-            <div className="row mb-4">
-
-
-
-
-<div className="row mb-4">
-
-    <div className="col-lg-3">
-        <div className="p-4 bg-white rounded-5 shadow-sm">
-            <h6>Total Customers</h6>
-            <h2 className="fw-bold">{customers.length}</h2>
+          <Search color="#64748b" />
+
+          <input
+            type="text"
+            placeholder="Search customer..."
+            className="form-control border-0 shadow-none ms-3"
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            style={{
+             background: darkMode
+                  ? "#1e293b"
+                  : "white",
+                color: darkMode
+                  ? "white"
+                  : "#0f172a",
+            }}
+          />
         </div>
-    </div>
 
-    <div className="col-lg-3">
-        <div className="p-4 bg-white rounded-5 shadow-sm">
-            <h6>Active</h6>
-            <h2 className="fw-bold text-success">980</h2>
-        </div>
-    </div>
+           <div className="d-flex align-items-center gap-3">
+       
+         <button
+           className="btn position-relative"
+           onClick={() =>
+             navigate("/notifications")
+           }
+           style={{
+             width: "50px",
+             height: "50px",
+             borderRadius: "15px",
+             background: darkMode
+               ? "#1e293b"
+               : "#e2e8f0",
+           }}
+         >
+           <Bell
+             color={
+               darkMode
+                 ? "white"
+                 : "#0f172a"
+             }
+           />
+       
+           <span
+             style={{
+               position: "absolute",
+               top: "5px",
+               right: "5px",
+               width: "10px",
+               height: "10px",
+               borderRadius: "50%",
+               background: "red",
+             }}
+           />
+         </button>
+       
+         <DarkModeToggle
+           darkMode={darkMode}
+           setDarkMode={setDarkMode}
+         />
+       
+       </div>
+      </div>
 
-    <div className="col-lg-3">
-        <div className="p-4 bg-white rounded-5 shadow-sm">
-            <h6>Premium</h6>
-            <h2 className="fw-bold text-warning">245</h2>
-        </div>
-    </div>
+<div
+  className="p-5 mb-4 position-relative overflow-hidden"
+  style={{
+    borderRadius: "35px",
+    background:
+      "linear-gradient(to right,#0f172a,#1e293b)",
+    minHeight: "240px",
+  }}
+>
+  <div
+    style={{
+      position: "absolute",
+      width: "350px",
+      height: "350px",
+      borderRadius: "50%",
+      background:
+        "rgba(255,255,255,0.05)",
+      top: "-100px",
+      right: "-100px",
+    }}
+  />
 
-    <div className="col-lg-3">
-        <div className="p-4 bg-white rounded-5 shadow-sm">
-            <h6>New This Month</h6>
-            <h2 className="fw-bold text-primary">120</h2>
-        </div>
-    </div>
+  <h1
+    className="fw-bold"
+    style={{
+      color: "white",
+      fontSize: "58px",
+      position: "relative",
+    }}
+  >
+    Customers
+  </h1>
 
+  <p
+    style={{
+      color: "#cbd5e1",
+      maxWidth: "700px",
+      lineHeight: "34px",
+      fontSize: "18px",
+      position: "relative",
+    }}
+  >
+    Manage customer relationships and
+    track your client details easily.
+  </p>
+
+  <button
+    className="btn btn-light mt-3"
+    onClick={() => setShowModal(true)}
+  >
+    + Add Customer
+  </button>
 </div>
 
-                {/* TOTAL CARD */}
-                <div className="col-lg-4 mb-3">
 
-                    <div
-                        className="p-3 d-flex justify-content-between align-items-center"
+      {/* STATS */}
 
-                        style={{
+      <div className="row mb-4 g-4">
+        <div className="col-lg-3">
+          <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Total Customers</h6>
 
-                            borderRadius: "22px",
-
-                            background:
-                                "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                            color: "white",
-
-                            height: "70px"
-
-                        }}
-                    >
-
-                        <div>
-
-                            <p className="m-0">
-                                Total Customers
-                            </p>
-
-                            <h3 className="fw-bold">
-                                {customers.length}
-                            </h3>
-
-                        </div>
-
-
-
-                        <Users size={40} />
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {/*
-            ========================================
-            ADD CUSTOMER FORM
-            ========================================
-            */}
-
-            <div
-                className="p-4 mb-4"
-
-                style={{
-
-                    borderRadius: "28px",
-
-                    background: darkMode
-                        ? "#0f172a"
-                        : "white",
-
-                    boxShadow:
-                        "0 10px 30px rgba(0,0,0,0.08)"
-
-                }}
-            >
-
-                <h4
-                    className="fw-bold mb-4"
-
-                    style={{
-
-                        color: darkMode
-                            ? "white"
-                            : "#0f172a"
-
-                    }}
-                >
-
-                    {editId
-                        ? "Update Customer"
-                        : "Add Customer"}
-
-                </h4>
-
-
-
-                <div className="row">
-
-                    {/* NAME */}
-                    <div className="col-md-3 mb-3">
-
-                        <input
-                            type="text"
-
-                            placeholder="Customer Name"
-
-                            className="form-control"
-
-                            name="name"
-
-                            value={form.name}
-
-                            onChange={handleChange}
-
-                            style={{
-
-                                height: "55px",
-
-                                borderRadius: "16px"
-
-                            }}
-                        />
-
-                    </div>
-
-
-
-                    {/* EMAIL */}
-                    <div className="col-md-3 mb-3">
-
-                        <input
-                            type="email"
-
-                            placeholder="Email"
-
-                            className="form-control"
-
-                            name="email"
-
-                            value={form.email}
-
-                            onChange={handleChange}
-
-                            style={{
-
-                                height: "55px",
-
-                                borderRadius: "16px"
-
-                            }}
-                        />
-
-                    </div>
-
-
-
-                    {/* PHONE */}
-                    <div className="col-md-3 mb-3">
-
-                        <input
-                            type="text"
-
-                            placeholder="Phone"
-
-                            className="form-control"
-
-                            name="phone"
-
-                            value={form.phone}
-
-                            onChange={handleChange}
-
-                            style={{
-
-                                height: "55px",
-
-                                borderRadius: "16px"
-
-                            }}
-                        />
-
-                    </div>
-
-
-
-                    {/* LOCATION */}
-                    <div className="col-md-3 mb-3">
-
-                        <input
-                            type="text"
-
-                            placeholder="Location"
-
-                            className="form-control"
-
-                            name="location"
-
-                            value={form.location}
-
-                            onChange={handleChange}
-
-                            style={{
-
-                                height: "55px",
-
-                                borderRadius: "16px"
-
-                            }}
-                        />
-
-                    </div>
-
-                </div>
-
-
-
-                {/* BUTTON */}
-                <button
-                    onClick={
-                        editId
-                            ? updateCustomer
-                            : addCustomer
-                    }
-
-                    className="btn px-4 py-3 mt-2"
-
-                    style={{
-
-                        borderRadius: "16px",
-
-                        background:
-                            "linear-gradient(to right,#0f172a,#1e293b)",
-
-                        color: "white",
-
-                        border: "none",
-
-                        fontWeight: "600"
-
-                    }}
-                >
-
-                    <Plus size={18} className="me-2" />
-
-                    {editId
-                        ? "Update Customer"
-                        : "Add Customer"}
-
-                </button>
-
-            </div>
-
-
-
-            {/*
-            ========================================
-            CUSTOMER CARDS
-            ========================================
-            */}
-
-            <div className="row">
-
-                {filteredCustomers.map((item) => (
-
-                    <div
-                        className="col-lg-4 mb-4"
-                        key={item._id}
-                    >
-
-                        <div
-                            className="p-4 h-100"
-
-                            style={{
-
-                                borderRadius: "28px",
-
-                                background: darkMode
-                                    ? "#0f172a"
-                                    : "white",
-
-                                boxShadow:
-                                    "0 10px 30px rgba(0,0,0,0.08)"
-
-                            }}
-                        >
-
-
-
-                            {/* TOP */}
-                            <div className="d-flex align-items-center justify-content-between">
-
-                                {/* AVATAR */}
-                                <div
-                                    className="d-flex justify-content-center align-items-center"
-
-                                    style={{
-
-                                        width: "70px",
-
-                                        height: "70px",
-
-                                        borderRadius: "50%",
-
-                                        background:
-                                            "linear-gradient(to right,#2563eb,#3b82f6)",
-
-                                        color: "white",
-
-                                        fontSize: "28px",
-
-                                        fontWeight: "700"
-
-                                    }}
-                                >
-
-                                    {item.name.charAt(0)}
-
-                                </div>
-
-
-
-                                {/* ACTIONS */}
-                                <div className="d-flex gap-2">
-
-                                    {/* EDIT */}
-                                    <button
-                                        onClick={() =>
-                                            editCustomer(item)
-                                        }
-
-                                        className="btn"
-
-                                        style={{
-
-                                            width: "45px",
-
-                                            height: "45px",
-
-                                            borderRadius: "14px",
-
-                                            background: "#22c55e",
-
-                                            color: "white"
-
-                                        }}
-                                    >
-
-                                        <Pencil size={18} />
-
-                                    </button>
-
-
-
-                                    {/* DELETE */}
-                                    <button
-                                        onClick={() =>
-                                            deleteCustomer(item._id)
-                                        }
-
-                                        className="btn"
-
-                                        style={{
-
-                                            width: "45px",
-
-                                            height: "45px",
-
-                                            borderRadius: "14px",
-
-                                            background: "#ef4444",
-
-                                            color: "white"
-
-                                        }}
-                                    >
-
-                                        <Trash2 size={18} />
-
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-
-                            {/* NAME */}
-                            <h3
-                                className="fw-bold mt-4"
-
-                                style={{
-
-                                    color: darkMode
-                                        ? "white"
-                                        : "#0f172a"
-
-                                }}
-                            >
-
-                                {item.name}
-
-                            </h3>
-
-
-
-                            {/* EMAIL */}
-                            <div className="d-flex align-items-center gap-2 mt-3">
-
-                                <Mail
-                                    size={18}
-                                    color="#64748b"
-                                />
-
-                                <p
-                                    className="m-0"
-
-                                    style={{
-
-                                        color: darkMode
-                                            ? "#cbd5e1"
-                                            : "#334155"
-
-                                    }}
-                                >
-
-                                    {item.email}
-
-                                </p>
-
-                            </div>
-
-
-
-                            {/* PHONE */}
-                            <div className="d-flex align-items-center gap-2 mt-3">
-
-                                <Phone
-                                    size={18}
-                                    color="#64748b"
-                                />
-
-                                <p
-                                    className="m-0"
-
-                                    style={{
-
-                                        color: darkMode
-                                            ? "#cbd5e1"
-                                            : "#334155"
-
-                                    }}
-                                >
-
-                                    {item.phone}
-
-                                </p>
-
-                            </div>
-
-
-
-                            {/* LOCATION */}
-                            <div className="d-flex align-items-center gap-2 mt-3">
-
-                                <MapPin
-                                    size={18}
-                                    color="#64748b"
-                                />
-
-                                <p
-                                    className="m-0"
-
-                                    style={{
-
-                                        color: darkMode
-                                            ? "#cbd5e1"
-                                            : "#334155"
-
-                                    }}
-                                >
-
-                                    {item.location}
-
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                ))}
-
-            </div>
-
+            <h2 className="fw-bold">
+              {customers.length}
+            </h2>
+          </div>
         </div>
 
-    )
+        <div className="col-lg-3">
+          <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Active</h6>
 
+            <h2 className="fw-bold text-success">
+              {Math.floor(
+                customers.length * 0.8
+              )}
+            </h2>
+          </div>
+        </div>
+
+        <div className="col-lg-3">
+          <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>Premium</h6>
+
+            <h2 className="fw-bold text-warning">
+              {Math.floor(
+                customers.length * 0.2
+              )}
+            </h2>
+          </div>
+        </div>
+
+        <div className="col-lg-3">
+          <div className="p-4 bg-white rounded-5 shadow-sm">
+            <h6>New This Month</h6>
+
+            <h2 className="fw-bold text-primary">
+              {customers.length}
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      {/* FORM */}
+
+      {/* <div
+        className="p-4 mb-4"
+        style={{
+          borderRadius: "28px",
+          background: darkMode
+            ? "#0f172a"
+            : "white",
+          boxShadow:
+            "0 10px 30px rgba(0,0,0,0.08)",
+        }}
+      >
+        <h4
+          className="fw-bold mb-4"
+          style={{
+            color: darkMode
+              ? "white"
+              : "#0f172a",
+          }}
+        >
+          {editId
+            ? "Update Customer"
+            : "Add Customer"}
+        </h4>
+
+        <div className="row">
+          <div className="col-md-3 mb-3">
+            <input
+              type="text"
+              placeholder="Customer Name"
+              className="form-control"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-3 mb-3">
+            <input
+              type="email"
+              placeholder="Email"
+              className="form-control"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-3 mb-3">
+            <input
+              type="text"
+              placeholder="Phone"
+              className="form-control"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-3 mb-3">
+            <input
+              type="text"
+              placeholder="Location"
+              className="form-control"
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={
+            editId
+              ? updateCustomer
+              : addCustomer
+          }
+          className="btn px-4 py-3 mt-2"
+          style={{
+            borderRadius: "16px",
+            background:
+              "linear-gradient(to right,#0f172a,#1e293b)",
+            color: "white",
+            border: "none",
+          }}
+        >
+          <Plus
+            size={18}
+            className="me-2"
+          />
+
+          {editId
+            ? "Update Customer"
+            : "Add Customer"}
+        </button>
+      </div> */}
+
+
+
+      {/* CUSTOMER LIST */}
+
+      {filteredCustomers.length === 0 && (
+        <div className="text-center py-5">
+          <h4
+            style={{
+              color: darkMode
+                ? "white"
+                : "#0f172a",
+            }}
+          >
+            No Customers Found
+          </h4>
+        </div>
+      )}
+
+      <div className="row">
+        {filteredCustomers.map((item) => (
+          <div
+            className="col-lg-4 col-md-6 mb-4"
+            key={item._id}
+          >
+            <div
+              className="p-4 h-100"
+              style={{
+                borderRadius: "28px",
+                background: darkMode
+                  ? "#0f172a"
+                  : "white",
+                boxShadow:
+                  "0 10px 30px rgba(0,0,0,0.08)",
+              }}
+            >
+              {/* TOP */}
+
+              <div className="d-flex justify-content-between align-items-center">
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    borderRadius: "50%",
+                    background:
+                      "linear-gradient(to right,#2563eb,#3b82f6)",
+                    color: "white",
+                    fontSize: "28px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {item?.name?.charAt(0) || "U"}
+                </div>
+
+                <div className="d-flex gap-2">
+                  <button
+                    onClick={() =>
+                      editCustomer(item)
+                    }
+                    className="btn"
+                    style={{
+                      width: "45px",
+                      height: "45px",
+                      borderRadius: "14px",
+                      background: "#22c55e",
+                      color: "white",
+                    }}
+                  >
+                    <Pencil size={18} />
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      deleteCustomer(item._id)
+                    }
+                    className="btn"
+                    style={{
+                      width: "45px",
+                      height: "45px",
+                      borderRadius: "14px",
+                      background: "#ef4444",
+                      color: "white",
+                    }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* NAME */}
+
+              <h3
+                className="fw-bold mt-4"
+                style={{
+                  color: darkMode
+                    ? "white"
+                    : "#0f172a",
+                }}
+              >
+                {item.name}
+              </h3>
+
+              {/* EMAIL */}
+
+              <div className="d-flex align-items-center gap-2 mt-3">
+                <Mail
+                  size={18}
+                  color="#64748b"
+                />
+
+                <p
+                  className="m-0"
+                  style={{
+                    color: darkMode
+                      ? "#cbd5e1"
+                      : "#334155",
+                  }}
+                >
+                  {item.email}
+                </p>
+              </div>
+
+              {/* PHONE */}
+
+              <div className="d-flex align-items-center gap-2 mt-3">
+                <Phone
+                  size={18}
+                  color="#64748b"
+                />
+
+                <p
+                  className="m-0"
+                  style={{
+                    color: darkMode
+                      ? "#cbd5e1"
+                      : "#334155",
+                  }}
+                >
+                  {item.phone}
+                </p>
+              </div>
+
+              {/* LOCATION */}
+
+              <div className="d-flex align-items-center gap-2 mt-3">
+                <MapPin
+                  size={18}
+                  color="#64748b"
+                />
+
+                <p
+                  className="m-0"
+                  style={{
+                    color: darkMode
+                      ? "#cbd5e1"
+                      : "#334155",
+                  }}
+                >
+                  {item.location}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+
+
+{
+  showModal && (
+    <div
+      className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+      style={{
+  background:
+    "rgba(0,0,0,0.4)",
+  backdropFilter: "blur(6px)",
+  zIndex: 9999,
+}}
+    >
+    <div
+  className="bg-white p-4 customer-modal"
+  style={{
+    width: "700px",
+    borderRadius: "25px",
+  }}
+>
+        <h3 className="fw-bold mb-4">
+          Add Customer
+        </h3>
+
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              placeholder="Name"
+              value={form.name}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type="text"
+              name="phone"
+              className="form-control"
+              placeholder="Phone"
+              value={form.phone}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6 mb-3">
+            <input
+              type="text"
+              name="location"
+              className="form-control"
+              placeholder="Location"
+              value={form.location}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              addCustomer();
+              setShowModal(false);
+            }}
+          >
+            Save
+          </button>
+
+          <button
+            className="btn btn-secondary"
+            onClick={() =>
+              setShowModal(false)
+            }
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default Customers
+
+    </div>
+  );
+};
+
+export default Customers;

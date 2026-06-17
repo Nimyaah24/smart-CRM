@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Eye, EyeOff } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { registerUser } from "../Api/userApi"
 import { toast } from "react-toastify"
@@ -12,7 +13,7 @@ const Register = () => {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+const [showPassword, setShowPassword] = useState(false)
     // REGISTER FUNCTION
     const handleSubmit = async (e) => {
 
@@ -119,11 +120,42 @@ const Register = () => {
                             </div>
 
                             {/* password input */}
-                            <div className="mb-4">
+                          <div className="mb-4 position-relative">
 
-                                <input type="password" autoComplete="new-password" className="form-control form-control-lg border-0 shadow-sm" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ background: "#f8fafc", borderRadius: "16px", padding: "16px" }} />
+  <input
+    type={showPassword ? "text" : "password"}
+    autoComplete="new-password"
+    className="form-control form-control-lg border-0 shadow-sm"
+    placeholder="Password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    style={{
+      background: "#f8fafc",
+      borderRadius: "16px",
+      padding: "16px",
+      paddingRight: "50px"
+    }}
+  />
 
-                            </div>
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    style={{
+      position: "absolute",
+      right: "18px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      cursor: "pointer",
+      color: "#64748b"
+    }}
+  >
+    {showPassword ? (
+      <EyeOff size={20} />
+    ) : (
+      <Eye size={20} />
+    )}
+  </span>
+
+</div>
 
                             {/* submit button */}
                             <button type="submit" className="btn w-100 text-white fw-bold py-3" style={{ background: "linear-gradient(to right,#0f172a,#1e293b)", borderRadius: "16px", fontSize: "18px", border: "none", boxShadow: "0 10px 20px rgba(15,23,42,0.2)" }} > Create Account </button>

@@ -6,7 +6,7 @@ import { useState } from "react"
 // useNavigate code use chyth route change cheyan
 import { Link, useNavigate } from "react-router-dom"
 
-// backend login api call cheyan
+import { Eye, EyeOff } from "lucide-react"
 
 
 // toast
@@ -116,13 +116,54 @@ const Login = () => {
 
 
                         {/* password */}
-                        <div className="mb-3 ">
+                       
 
-                            <label className="form-label fw-semibold"> Password  </label>
+     <div className="mb-3">
 
-                            <input autoComplete="new-password" type="password" className="form-control form-control-lg " placeholder="Enter your password" value={form.password} onChange={handlechange} name="password" />
+    <label className="form-label fw-semibold">
+        Password
+    </label>
 
-                        </div>
+    <div className="position-relative">
+
+        <input
+            autoComplete="new-password"
+            type={showPassword ? "text" : "password"}
+            className="form-control form-control-lg"
+            placeholder="Enter your password"
+            value={form.password}
+            onChange={handlechange}
+            name="password"
+        />
+
+        <button
+            type="button"
+            onClick={() =>
+                setShowPassword(!showPassword)
+            }
+            style={{
+                position: "absolute",
+                right: "15px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                color:" #7e7e7f"
+            }}
+        >
+            {showPassword ? (
+                <EyeOff size={20} />
+            ) : (
+                <Eye size={20} />
+            )}
+        </button>
+
+    </div>
+
+</div>
+
+                        
 
                         {/* remember + forgot */}
                         <div className="d-flex justify-content-between align-items-center mb-4">

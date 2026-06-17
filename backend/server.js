@@ -1,50 +1,70 @@
-
-// express import cheyunu express vechan server create cheyunnath      14
+// express framework import cheyyunnu server create cheyyan
 const express = require('express')
 
-// frontend backend connect cheyan cors vnm illeghil request block avm     15
+// frontend-backend communication allow cheyyan cors import cheyyunnu
 const cors = require('cors')
 
-// cookies require
+// browser cookies read cheyyanum manage cheyyanum cookie-parser import cheyyunnu
 const cookieParser = require('cookie-parser')
 
-// db import cheyunnu connect function use cheyan vndit    16
+// mongodb database connect cheyyan db connection function import cheyyunnu
 const connectDB = require("./config/db")
 
-// connect route in server.js         46
+// user related routes import cheyyunnu
 const userRoute = require("./routes/userRoute")
 
-// customer routes import
-const customerRoutes =require("./routes/customerRoute")
+// customer management routes import cheyyunnu
+const customerRoutes = require("./routes/customerRoute")
 
-// express application create chyunnnu back end wrk aavunnath app use chythan    17
+// project management routes import cheyyunnu
+const projectRoutes = require("./routes/projectRoute")
+
+// task management routes import cheyyunnu
+const taskRoutes = require("./routes/taskRoutes")
+
+// analytics dashboard routes import cheyyunnu
+const analyticsRoute = require("./routes/analyticsRoute")
+
+// payment integration routes import cheyyunnu
+const paymentRoute = require("./routes/paymentRoute")
+
+// express application instance create cheyyunnu
 const app = express()
 
-// frontrnd request allow cheyan -- middileware use cheyan     18
+// frontend requests allow cheyyan cors middleware use cheyyunnu
 app.use(cors({
-    origin: "http://localhost:5174",
-    origin: true,
-    credentials: true
+origin: "http://localhost:5173",
+credentials: true
 }))
 
+// cookies access cheyyan middleware use cheyyunnu
 app.use(cookieParser())
 
-// frontend data varumbo json data aayt read cheyan    19
+// frontend-il ninn varunna JSON data parse cheyyan middleware use cheyyunnu
 app.use(express.json())
 
-// server path setting [main part]         47
+// user related APIs register cheyyunnu
 app.use('/api/user', userRoute)
 
-// customer api
+// customer related APIs register cheyyunnu
 app.use("/api/customer", customerRoutes)
 
-// db connection function call cheyunnu without this mongodb connect aavila    20
+// project related APIs register cheyyunnu
+app.use("/api/project", projectRoutes)
+
+// task related APIs register cheyyunnu
+app.use("/api/task", taskRoutes)
+
+// analytics related APIs register cheyyunnu
+app.use("/api/analytics", analyticsRoute)
+
+// payment related APIs register cheyyunnu
+app.use("/api/payment", paymentRoute)
+
+// mongodb database connection establish cheyyunnu
 connectDB()
 
-// server starting     21
+// backend server port 5000-il start cheyyunnu
 app.listen(5000, () => {
-    console.log("server running");
+console.log("server running");
 })
-
-
-
