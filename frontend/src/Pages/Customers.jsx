@@ -472,7 +472,13 @@ setForm({
   </p>
 
   <button
-    className="btn btn-light mt-3"
+    className="btn" style={{   background:
+      "linear-gradient(135deg,#2563eb,#3b82f6)",
+    color: "white",
+    border: "none",
+    borderRadius: "18px",
+    padding: "14px 28px",
+    fontWeight: "600"}}
     onClick={() => setShowModal(true)}
   >
     + Add Customer
@@ -714,16 +720,15 @@ setForm({
   style={{
     width: "700px",
     borderRadius: "25px",
-    background: darkMode ? "#0f172a" : "white",
-    color: darkMode ? "white" : "#0f172a"
-  }}
+ background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",}}
+  
 >
         <h3 className="fw-bold mb-4">
           Add Customer
         </h3>
 
-        <div className="row" style={{ background: darkMode ? "#1e293b" : "white",
-    color: darkMode ? "white" : "#0f172a",}}>
+        <div className="row" >
           <div className="col-md-6 mb-3">
            <input
   type="text"
