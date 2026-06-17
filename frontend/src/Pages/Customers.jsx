@@ -709,26 +709,27 @@ setForm({
     <div
       className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
       style={{
- background: darkMode ? "#1e293b" : "white",
-    color: darkMode ? "white" : "#0f172a",
+  background:
+    "rgba(0,0,0,0.4)",
   backdropFilter: "blur(6px)",
   zIndex: 9999,
 }}
     >
- <div
-  className="bg-white p-4 customer-modal"
+<div
+  className="p-4 customer-modal"
   style={{
     width: "700px",
     borderRadius: "25px",
- background: darkMode ? "#1e293b" : "white",
-    color: darkMode ? "white" : "#0f172a",}}
-  
+    background: darkMode ? "#0f172a" : "white",
+    color: darkMode ? "white" : "#0f172a",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.25)"
+  }}
 >
         <h3 className="fw-bold mb-4">
           Add Customer
         </h3>
 
-        <div className="row" >
+        <div className="row">
           <div className="col-md-6 mb-3">
            <input
   type="text"
