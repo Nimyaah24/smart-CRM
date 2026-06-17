@@ -396,7 +396,7 @@ const completedPercentage =
       <div
         className="p-5 mb-4 position-relative overflow-hidden"
         style={{
-          borderRadius: "35px",
+          borderRadius: "25px",
           background:
             "linear-gradient(to right,#0f172a,#1e293b)",
           minHeight: "240px",
@@ -547,13 +547,14 @@ const completedPercentage =
   <div
     className="p-4"
     style={{
-      borderRadius: "35px",
+      borderRadius: "25px",
       background: darkMode
         ? "#0f172a"
         : "rgba(255,255,255,0.7)",
       backdropFilter: "blur(10px)",
       boxShadow:
         "0 10px 30px rgba(0,0,0,0.08)",
+         minHeight: "600px",
     }}
   >
     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -615,7 +616,7 @@ const completedPercentage =
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="p-4 mb-3"
+                    className="p-3 mb-2"
                     style={{
                       borderRadius: "25px",
                       background: darkMode
@@ -751,13 +752,14 @@ const completedPercentage =
   <div
     className="p-4"
     style={{
-      borderRadius: "35px",
+      borderRadius: "25px",
       background: darkMode
         ? "#0f172a"
         : "rgba(255,255,255,0.7)",
       backdropFilter: "blur(10px)",
       boxShadow:
         "0 10px 30px rgba(0,0,0,0.08)",
+         minHeight: "600px",
     }}
   >
     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -819,7 +821,7 @@ const completedPercentage =
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="p-4 mb-3"
+                    className="p-3 mb-2"
                     style={{
                       borderRadius: "25px",
                       background: darkMode
@@ -956,13 +958,14 @@ onClick={() => {
   <div
     className="p-4"
     style={{
-      borderRadius: "35px",
+      borderRadius: "25px",
       background: darkMode
         ? "#0f172a"
         : "rgba(255,255,255,0.7)",
       backdropFilter: "blur(10px)",
       boxShadow:
         "0 10px 30px rgba(0,0,0,0.08)",
+         minHeight: "600px",
     }}
   >
     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -1024,7 +1027,7 @@ onClick={() => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="p-4 mb-3"
+                    className="p-3 mb-2"
                     style={{
                       borderRadius: "25px",
                       background: darkMode
