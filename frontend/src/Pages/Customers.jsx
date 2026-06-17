@@ -722,7 +722,8 @@ setForm({
           Add Customer
         </h3>
 
-        <div className="row">
+        <div className="row" style={{ background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",}}>
           <div className="col-md-6 mb-3">
            <input
   type="text"
