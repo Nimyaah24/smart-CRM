@@ -709,8 +709,8 @@ setForm({
     <div
       className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
       style={{
-  background:
-    "rgba(0,0,0,0.4)",
+ background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",
   backdropFilter: "blur(6px)",
   zIndex: 9999,
 }}
