@@ -709,11 +709,13 @@ setForm({
   zIndex: 9999,
 }}
     >
-    <div
+ <div
   className="bg-white p-4 customer-modal"
   style={{
     width: "700px",
     borderRadius: "25px",
+    background: darkMode ? "#0f172a" : "white",
+    color: darkMode ? "white" : "#0f172a"
   }}
 >
         <h3 className="fw-bold mb-4">
@@ -722,14 +724,21 @@ setForm({
 
         <div className="row">
           <div className="col-md-6 mb-3">
-            <input
-              type="text"
-              name="name"
-              className="form-control"
-              placeholder="Name"
-              value={form.name}
-              onChange={handleChange}
-            />
+           <input
+  type="text"
+  name="name"
+  className="form-control"
+  placeholder="Name"
+  value={form.name}
+  onChange={handleChange}
+  style={{
+    background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",
+    border: darkMode
+      ? "1px solid #334155"
+      : "1px solid #d1d5db"
+  }}
+/>
           </div>
 
           <div className="col-md-6 mb-3">
@@ -740,6 +749,13 @@ setForm({
               placeholder="Email"
               value={form.email}
               onChange={handleChange}
+              style={{
+    background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",
+    border: darkMode
+      ? "1px solid #334155"
+      : "1px solid #d1d5db"
+  }}
             />
           </div>
 
@@ -751,6 +767,13 @@ setForm({
               placeholder="Phone"
               value={form.phone}
               onChange={handleChange}
+              style={{
+    background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",
+    border: darkMode
+      ? "1px solid #334155"
+      : "1px solid #d1d5db"
+  }}
             />
           </div>
 
@@ -762,6 +785,13 @@ setForm({
               placeholder="Location"
               value={form.location}
               onChange={handleChange}
+              style={{
+    background: darkMode ? "#1e293b" : "white",
+    color: darkMode ? "white" : "#0f172a",
+    border: darkMode
+      ? "1px solid #334155"
+      : "1px solid #d1d5db"
+  }}
             />
           </div>
         </div> 
@@ -782,7 +812,7 @@ setForm({
 </button>
 
           <button
-            className="btn btn-secondary"
+            className="btn btn-secondary ms-4"
             onClick={() =>
               setShowModal(false)
             }
