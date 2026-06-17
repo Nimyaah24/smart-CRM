@@ -43,7 +43,7 @@ JSON.stringify(darkMode)
   const handleLogout = async () => {
     try {
       await fetch(
-        "http://localhost:5000/api/user/logout",
+        "https://smart-crm-pcys.onrender.com/api/user/logout",
         {
           method: "POST",
           credentials: "include",
@@ -84,7 +84,7 @@ JSON.parse(localStorage.getItem("completed")) || []
 
 
 fetch(
-"http://localhost:5000/api/customer/all"
+"https://smart-crm-pcys.onrender.com/api/customer/all"
 )
 .then(res => res.json())
 .then(data =>
@@ -94,7 +94,7 @@ data.customers || []
 );
 
 fetch(
-"http://localhost:5000/api/project/all"
+"https://smart-crm-pcys.onrender.com/api/project/all"
 )
 .then(res => res.json())
 .then(data =>

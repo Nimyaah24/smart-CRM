@@ -76,11 +76,9 @@ useEffect(() => {
 
 
 
-    /*
-    ============================================
-    FORM STATES
-    ============================================
-    */
+   
+    // FORM STATES
+   
 const [currentPassword,setCurrentPassword] = useState("")
 const [newPassword,setNewPassword] = useState("")
 const [confirmPassword,setConfirmPassword] = useState("")
@@ -257,7 +255,7 @@ const handleLogout = async () => {
   try {
 
     await fetch(
-      "http://localhost:5000/api/user/logout",
+      "https://smart-crm-pcys.onrender.com/api/user/logout",
       {
         method: "POST",
         credentials: "include",
@@ -289,11 +287,9 @@ useEffect(() => {
 
     return (
 
-        /*
-        ============================================
-        MAIN CONTAINER
-        ============================================
-        */
+     
+        // MAIN CONTAINER
+       
 
         <div
 
@@ -317,9 +313,9 @@ useEffect(() => {
 
 
 
-            {/* ============================================
-            TOP NAVBAR
-            ============================================ */}
+            
+            {/* TOP NAVBAR */}
+    
 
             <div className="d-flex justify-content-between align-items-center mb-4">
 
@@ -572,9 +568,8 @@ n => n.unread
 
 
 
-            {/* ============================================
-            HERO SECTION
-            ============================================ */}
+            {/* HERO SECTION */}
+           
 
             <div
 
@@ -670,9 +665,9 @@ n => n.unread
 
 
 
-            {/* ============================================
-            SETTINGS CONTENT
-            ============================================ */}
+            
+            {/* SETTINGS CONTENT */}
+          
 
             <div className="row">
 

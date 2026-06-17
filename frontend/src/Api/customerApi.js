@@ -1,7 +1,7 @@
 
 
 // customer API base URL store cheyyunnu
-const baseURL = "http://localhost:5000/api/customer"
+const baseURL = "https://smart-crm-pcys.onrender.com/api/customer"
 
 // ella customers fetch cheyyan GET API function create cheyyunnu
 export const getCustomers = async () => {

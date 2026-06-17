@@ -18,7 +18,7 @@ const [user, setUser] = useState(null);
 const handlePayment = async () => {
    
   const res = await fetch(
-    "http://localhost:5000/api/payment/create-order",
+    "https://smart-crm-pcys.onrender.com/api/payment/create-order",
     {
       method: "POST",
       headers: {
@@ -55,7 +55,7 @@ const handlePayment = async () => {
   const getProfile = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/user/profile",
+        "https://smart-crm-pcys.onrender.com/api/user/profile",
         {
           credentials: "include",
         }
@@ -76,7 +76,7 @@ const handlePayment = async () => {
   const handleLogout = async () => {
     try {
       await fetch(
-        "http://localhost:5000/api/user/logout",
+        "https://smart-crm-pcys.onrender.com/api/user/logout",
         {
           method: "POST",
           credentials: "include",

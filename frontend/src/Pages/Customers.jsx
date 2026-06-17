@@ -50,7 +50,7 @@ const [showModal, setShowModal] =
   const fetchCustomers = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/customer/all",
+        "https://smart-crm-pcys.onrender.com/api/customer/all",
         {
           credentials: "include",
         }
@@ -90,7 +90,7 @@ const [showModal, setShowModal] =
 
     try {
       await fetch(
-        "http://localhost:5000/api/customer/add",
+        "https://smart-crm-pcys.onrender.com/api/customer/add",
         {
           method: "POST",
           headers: {
@@ -141,7 +141,7 @@ localStorage.setItem(
 
     try {
       await fetch(
-        `http://localhost:5000/api/customer/delete/${id}`,
+        `https://smart-crm-pcys.onrender.com/api/customer/delete/${id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -188,7 +188,7 @@ fetchCustomers();
 const updateCustomer = async () => {
   try {
     const res = await fetch(
-      `http://localhost:5000/api/customer/update/${editId}`,
+      `https://smart-crm-pcys.onrender.com/api/customer/update/${editId}`,
       {
         method: "PUT",
         headers: {
@@ -513,103 +513,7 @@ localStorage.setItem(
         </div>
       </div>
 
-      {/* FORM */}
-
-      {/* <div
-        className="p-4 mb-4"
-        style={{
-          borderRadius: "28px",
-          background: darkMode
-            ? "#0f172a"
-            : "white",
-          boxShadow:
-            "0 10px 30px rgba(0,0,0,0.08)",
-        }}
-      >
-        <h4
-          className="fw-bold mb-4"
-          style={{
-            color: darkMode
-              ? "white"
-              : "#0f172a",
-          }}
-        >
-          {editId
-            ? "Update Customer"
-            : "Add Customer"}
-        </h4>
-
-        <div className="row">
-          <div className="col-md-3 mb-3">
-            <input
-              type="text"
-              placeholder="Customer Name"
-              className="form-control"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-md-3 mb-3">
-            <input
-              type="email"
-              placeholder="Email"
-              className="form-control"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-md-3 mb-3">
-            <input
-              type="text"
-              placeholder="Phone"
-              className="form-control"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-md-3 mb-3">
-            <input
-              type="text"
-              placeholder="Location"
-              className="form-control"
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <button
-          onClick={
-            editId
-              ? updateCustomer
-              : addCustomer
-          }
-          className="btn px-4 py-3 mt-2"
-          style={{
-            borderRadius: "16px",
-            background:
-              "linear-gradient(to right,#0f172a,#1e293b)",
-            color: "white",
-            border: "none",
-          }}
-        >
-          <Plus
-            size={18}
-            className="me-2"
-          />
-
-          {editId
-            ? "Update Customer"
-            : "Add Customer"}
-        </button>
-      </div> */}
+    
 
 
 

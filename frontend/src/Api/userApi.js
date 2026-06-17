@@ -2,7 +2,7 @@
 
 
 // backend API base URL store cheyyunnu
-const baseURL = "http://localhost:5000/api/user";
+const baseURL = "https://smart-crm-pcys.onrender.com/api/user";
 
 // new user register cheyyan register API function create cheyyunnu
 export const registerUser = async (data) => {

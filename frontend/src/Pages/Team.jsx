@@ -1,6 +1,4 @@
-// ============================================
-// IMPORTS
-// ============================================
+
 
 // react hook
 import { useState, useEffect } from "react"
@@ -29,30 +27,25 @@ from "lucide-react"
 
 import { Pencil } from "lucide-react"
 
-// ============================================
+
 // TEAM COMPONENT
-// ============================================
 
 const Team = () => {
 
 
     const [search, setSearch] = useState("")
 
-    /*
-    ============================================
-    NAVIGATION
-    ============================================
-    */
+    
+    // NAVIGATION
+   
 
     const navigate = useNavigate()
 
 
 
-    /*
-    ============================================
-    DARK MODE
-    ============================================
-    */
+   
+    // DARK MODE
+   
 
   const [darkMode, setDarkMode] = useState(
   JSON.parse(localStorage.getItem("darkMode")) || false
@@ -66,54 +59,9 @@ useEffect(() => {
 }, [darkMode]);
 
 
-    /*
-    ============================================
-    TEAM MEMBERS DATA
-    ============================================
-    */
-
-// const [members, setMembers] = useState([
-//   {
-//     id: 1,
-//     name: "John Doe",
-//     role: "UI/UX Designer",
-//     status: "Online",
-//     email: "john@example.com",
-//     phone: "+91 9876543210",
-//     image: "https://i.pravatar.cc/150?img=12"
-//   },
-
-//   {
-//     id: 2,
-//     name: "Sarah Wilson",
-//     role: "Frontend Developer",
-//     status: "Busy",
-//     email: "sarah@example.com",
-//     phone: "+91 9876543211",
-//     image: "https://i.pravatar.cc/150?img=22"
-//   },
-
-//   {
-//     id: 3,
-//     name: "Michael Lee",
-//     role: "Backend Developer",
-//     status: "Online",
-//     email: "michael@example.com",
-//     phone: "+91 9876543212",
-//     image: "https://i.pravatar.cc/150?img=33"
-//   },
-
-//   {
-//     id: 4,
-//     name: "Emma Watson",
-//     role: "Project Manager",
-//     status: "Offline",
-//     email: "emma@example.com",
-//     phone: "+91 9876543213",
-//     image: "https://i.pravatar.cc/150?img=44"
-//   }
-// ])
-
+    
+    // TEAM MEMBERS DATA
+  
 const [members, setMembers] = useState(() => {
 
   const savedMembers =
@@ -154,11 +102,8 @@ const [selectedMember, setSelectedMember] =
 useState(null)
 
 
-    /*
-    ============================================
-    STATUS COLORS
-    ============================================
-    */
+    
+    // STATUS COLORS
 
     const statusColor = (status) => {
 
@@ -244,11 +189,9 @@ const filteredMembers = members.filter((member)=>
 
     return (
 
-        /*
-        ============================================
-        MAIN CONTAINER
-        ============================================
-        */
+       
+        // MAIN CONTAINER
+      
 
         <div
 
@@ -272,9 +215,8 @@ const filteredMembers = members.filter((member)=>
 
 
 
-            {/* ============================================
-            TOP NAVBAR
-            ============================================ */}
+           
+            {/* TOP NAVBAR */}
 
             <div className="d-flex justify-content-between align-items-center mb-4">
 
@@ -460,9 +402,8 @@ const filteredMembers = members.filter((member)=>
 
 
 
-            {/* ============================================
-            HERO SECTION
-            ============================================ */}
+            
+            {/* HERO SECTION */}
 
             <div
 
@@ -600,9 +541,9 @@ onClick={() => {
 
 
 
-            {/* ============================================
-            TOP STATS
-            ============================================ */}
+           
+            {/* TOP STATS */}
+         
 
             <div className="row mb-4">
 
@@ -748,9 +689,7 @@ onClick={() => {
 
 
 
-            {/* ============================================
-            TEAM MEMBERS
-            ============================================ */}
+            {/* TEAM MEMBERS */}
 
             <div className="row">
 

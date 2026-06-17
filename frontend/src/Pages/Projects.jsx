@@ -52,7 +52,7 @@ useEffect(() => {
   const fetchProjects = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/project/all"
+        "https://smart-crm-pcys.onrender.com/api/project/all"
       );
 
       const data = await res.json();
@@ -76,7 +76,7 @@ const progressValue = Math.min(
   const addProject = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/project/add",
+        "https://smart-crm-pcys.onrender.com/api/project/add",
         {
           method: "POST",
           headers: {
@@ -131,7 +131,7 @@ fetchProjects();
   const deleteProject = async (id) => {
     try {
       await fetch(
-        `http://localhost:5000/api/project/delete/${id}`,
+        `https://smart-crm-pcys.onrender.com/api/project/delete/${id}`,
         {
           method: "DELETE",
         }
@@ -179,7 +179,7 @@ fetchProjects();
   const updateProject = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/project/update/${editId}`,
+        `https://smart-crm-pcys.onrender.com/api/project/update/${editId}`,
         {
           method: "PUT",
           headers: {

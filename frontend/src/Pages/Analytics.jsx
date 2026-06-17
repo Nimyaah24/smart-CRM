@@ -81,7 +81,7 @@ useEffect(() => {
     try {
           // customer API call cheyyunnu
       const res = await fetch(
-        "http://localhost:5000/api/customer/all"
+        "https://smart-crm-pcys.onrender.com/api/customer/all"
       )
 
           // response json aakki convert cheyyunnu
@@ -104,7 +104,7 @@ useEffect(() => {
 
           // project API call cheyyunnu
       const res = await fetch(
-        "http://localhost:5000/api/project/all"
+        "https://smart-crm-pcys.onrender.com/api/project/all"
       )
 
           // response json aakki convert cheyyunnu
@@ -127,7 +127,7 @@ useEffect(() => {
 
           // task API call cheyyunnu
       const res = await fetch(
-        "http://localhost:5000/api/task/all"
+        "https://smart-crm-pcys.onrender.com/api/task/all"
       )
 
           // response json aakki convert cheyyunnu

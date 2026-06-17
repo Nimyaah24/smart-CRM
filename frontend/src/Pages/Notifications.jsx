@@ -1,6 +1,3 @@
-// ============================================
-// IMPORTS
-// ============================================
 
 // react hooks
 import { useState, useEffect } from "react"
@@ -26,27 +23,22 @@ from "lucide-react"
 
 
 
-// ============================================
+
 // NOTIFICATIONS COMPONENT
-// ============================================
+
 
 const Notifications = () => {
 
-    /*
-    ============================================
-    NAVIGATION
-    ============================================
-    */
+  
+    // NAVIGATION
+ 
 
     const navigate = useNavigate()
 
 const [search, setSearch] = useState("")
 
-    /*
-    ============================================
-    DARK MODE STATE
-    ============================================
-    */
+    
+    // DARK MODE STATE
 
   const [darkMode, setDarkMode] = useState(
   JSON.parse(localStorage.getItem("darkMode")) || false
@@ -70,11 +62,9 @@ useEffect(() => {
 }, [darkMode]);
 
 
-    /*
-    ============================================
-    NOTIFICATION DATA
-    ============================================
-    */
+   
+    // NOTIFICATION DATA
+   
 
    const [notifications, setNotifications] =
   useState(() => {
@@ -102,11 +92,9 @@ console.log(
 
 
 
-    /*
-    ============================================
-    ICON FUNCTION
-    ============================================
-    */
+    
+    // ICON FUNCTION
+   
 
     const notificationIcon = (type) => {
 
@@ -140,11 +128,9 @@ console.log(
 
     return (
 
-        /*
-        ============================================
-        MAIN CONTAINER
-        ============================================
-        */
+  
+        // MAIN CONTAINER
+       
 
         <div
 
@@ -168,9 +154,7 @@ console.log(
 
 
 
-            {/* ============================================
-            TOP NAVBAR
-            ============================================ */}
+            {/* TOP NAVBAR */}
 
             <div className="d-flex justify-content-between align-items-center mb-4">
 
@@ -348,9 +332,7 @@ console.log(
 
 
 
-            {/* ============================================
-            HERO CARD
-            ============================================ */}
+            {/*  HERO CARD */}
 
             <div
 
@@ -415,9 +397,6 @@ console.log(
 
                 </h1>
                 
-{/* <h3 style={{ color: "red" }}>
-  Notifications: {notifications.length}
-</h3> */}
 
 
 
@@ -511,9 +490,7 @@ setNotifications([])
 
 
 
-            {/* ============================================
-            NOTIFICATION LIST
-            ============================================ */}
+            {/* NOTIFICATION LIST */}
 
             <div>
 {console.log("Rendering", notifications)}
