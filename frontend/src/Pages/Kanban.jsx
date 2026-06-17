@@ -617,15 +617,14 @@ const completedPercentage =
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className="p-3 mb-2"
-                    style={{
+                      style={{
                       borderRadius: "25px",
                       background: darkMode
                         ? "#1e293b"
                         : "white",
                       boxShadow:
                         "0 10px 20px rgba(0,0,0,0.05)",
-                      ...provided.draggableProps
-                        .style,
+                      ...provided.draggableProps.style,
                     }}
                   >
 
@@ -822,7 +821,7 @@ const completedPercentage =
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className="p-3 mb-2"
-                    style={{
+       style={{
                       borderRadius: "25px",
                       background: darkMode
                         ? "#1e293b"
