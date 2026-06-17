@@ -554,7 +554,7 @@ const completedPercentage =
       backdropFilter: "blur(10px)",
       boxShadow:
         "0 10px 30px rgba(0,0,0,0.08)",
-         minHeight: "600px",
+         
     }}
   >
     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -759,7 +759,7 @@ const completedPercentage =
       backdropFilter: "blur(10px)",
       boxShadow:
         "0 10px 30px rgba(0,0,0,0.08)",
-         minHeight: "600px",
+         
     }}
   >
     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -965,7 +965,7 @@ onClick={() => {
       backdropFilter: "blur(10px)",
       boxShadow:
         "0 10px 30px rgba(0,0,0,0.08)",
-         minHeight: "600px",
+        
     }}
   >
     <div className="d-flex justify-content-between align-items-center mb-4">
