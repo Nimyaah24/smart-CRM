@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 // back button icon import cheyyunnu
 import { ArrowLeft } from "lucide-react"
 // dark mode toggle component import cheyyunnu
-import DarkModeToggle from "../components/DarkModeToggle"
+import DarkModeToggle from "../Components/DarkModeToggle"
 // recharts chart components import cheyyunnu analytics charts create cheyyan
 import {
   ResponsiveContainer,

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Sidebar from "../components/Sidebar";
-import DarkModeToggle from "../components/DarkModeToggle";
+import Sidebar from "../Components/Sidebar";
+import DarkModeToggle from "../Components/DarkModeToggle";
 
 import {
   Bell,

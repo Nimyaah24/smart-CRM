@@ -1,7 +1,4 @@
 
-// IMPORTS
-
-
 // react hook
 import { useState , useEffect} from "react"
 
@@ -9,7 +6,7 @@ import { useState , useEffect} from "react"
 import { useNavigate } from "react-router-dom"
 
 // dark mode component
-import DarkModeToggle from "../components/DarkModeToggle"
+import DarkModeToggle from "../Components/DarkModeToggle"
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import DarkModeToggle from "../components/DarkModeToggle";
+import DarkModeToggle from "../Components/DarkModeToggle";
 
 import { Pencil } from "lucide-react";
 
