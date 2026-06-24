@@ -1,46 +1,42 @@
-// jwt token verify cheyyan jsonwebtoken import cheyyunnu
 const jwt = require("jsonwebtoken");
 
-// user authentication check cheyyan middleware function create cheyyunnu
 const authmiddileware = async (req, res, next) => {
+  console.log("AUTH MIDDLEWARE HIT");
   try {
 
-    // browser cookies-il ninn token edukkunnu
-    const token = req.cookies.token;
+    console.log("FULL HEADERS =", req.headers);
+console.log("AUTH HEADER =", req.headers.authorization);
+console.log("COOKIE TOKEN =", req.cookies?.token);
 
-    // token console-il display cheyyunnu debugginginu vendi
+    let token = req.cookies?.token;
+
+    if (!token && req.headers.authorization) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
     console.log("TOKEN =", token);
 
-    // token illenkil unauthorized response return cheyyunnu
     if (!token) {
       return res.status(401).json({
-        msg: "No token found"
+        msg: "No token found",
       });
     }
 
-    // token verify cheyth user data decode cheyyunnu
     const verifyToken = jwt.verify(
       token,
       process.env.JWT_SECRETKEY
     );
 
-    // decoded user data request object-il store cheyyunnu
     req.user = verifyToken;
 
-    // adutha middleware allenkil controllerilek pokunnu
     next();
 
   } catch (err) {
-
-    // token verification error console-il display cheyyunnu
-    console.log("TOKEN ERROR:", err);
-
-    // invalid token aanenkil unauthorized response return cheyyunnu
+    console.log(err);
     return res.status(401).json({
-      msg: "Invalid token"
+      msg: "Invalid token",
     });
   }
 };
 
-// middleware export cheyyunnu vere files-il use cheyyan
 module.exports = authmiddileware;

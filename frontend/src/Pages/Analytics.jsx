@@ -133,9 +133,14 @@ useEffect(() => {
           // response json aakki convert cheyyunnu
       const data = await res.json()
 
-          // task data state-il save cheyyunnu
-      setTasks(data.tasks || [])
+       console.log("FULL RESPONSE =", data)
+       
+console.log("TASKS =", data.tasks)
 
+          // task data state-il save cheyyunnu
+     setTasks(data.tasks || [])
+
+      
         // error console-il show cheyyunnu
     } catch (err) {
       console.log(err)
@@ -206,17 +211,20 @@ const revenueData = [
   ]
 
   // task progress chart-in vendi task data map cheyyunnu
-  const salesData = tasks.map(
-    (item, index) => ({
-      name: `T${index + 1}`,
-      sales:
-        item.status === "Completed"
-          ? 100
-          : item.status === "Running"
-          ? 70
-          : 30
-    })
-  )
+const salesData = tasks.map(
+  (item, index) => ({
+    name: item.title || `Task ${index + 1}`,
+    sales:
+      item.status === "Completed"
+        ? 100
+        : item.status === "Running"
+        ? 70
+        : 30
+  })
+)
+
+console.log("salesData =", salesData)
+
 
   // pie chart colors define cheyyunnu
   const COLORS = [
@@ -571,14 +579,12 @@ const revenueData = [
 >
 
         {/*  tasks illenkil message show cheyyunnu */}
-       {
-  tasks.length === 0 ? (
+{
+  projects.length === 0 ? (
     <h5 className="text-center">
-      No Tasks Found
+      No Projects Found
     </h5>
   ) : (
-
-                // responsive chart container create cheyyunnu
     <ResponsiveContainer width="100%" height={350}>
 
               {/* // area chart create cheyyunnu */}
@@ -679,7 +685,7 @@ const revenueData = [
 >
 
   {/* // tasks illenkil message show cheyyunnu */}
-{tasks.length === 0 ? (
+{projects.length === 0 ? (
   <h5 className="text-center">
     No Tasks Found
   </h5>
@@ -778,21 +784,15 @@ const revenueData = [
 
     {/* // tasks illenkil message show cheyyunnu */}
 {
-  tasks.length === 0 ? (
+  salesData.length === 0 ? (
     <h5 className="text-center">
       No Tasks Found
     </h5>
   ) : (
-
-            // responsive bar chart container create cheyyunnu
     <ResponsiveContainer width="100%" height={350}>
-                {/* bar chart create cheyyunnu */}
       <BarChart data={salesData}>
-                    {/*  x axis create cheyyunnu */}
         <XAxis dataKey="name" />
-                    {/*  tooltip enable cheyyunnu */}
         <Tooltip />
-                    {/*  task progress bars create cheyyunnu */}
         <Bar
           dataKey="sales"
           fill="#2563eb"

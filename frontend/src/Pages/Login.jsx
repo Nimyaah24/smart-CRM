@@ -54,8 +54,22 @@ const Login = () => {
 
             // email, password indon nokunu
             const res = await loginUser(form)
+
+console.log("LOGIN RESPONSE =", res);
+
             if (res.success) {
+                   localStorage.setItem("token", res.token);
                 toast.success("Login Success", { autoClose: 1000, style: { background: "white", border: "2px solid green", color: "#111827" } })
+
+console.log("TOKEN SAVE =", res.token);
+
+localStorage.setItem("token", res.token);
+
+console.log(
+  "LOCAL TOKEN =",
+  localStorage.getItem("token")
+);
+
                 navigate("/dashboard")
             }
             // success

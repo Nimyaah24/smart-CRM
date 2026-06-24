@@ -1,6 +1,8 @@
 // user data database-il store cheyyanum fetch cheyyanum User model import cheyyunnu
 const User = require('../model/userModel')
 
+const mongoose = require("mongoose");
+
 // password hash cheyyanum compare cheyyanum bcrypt import cheyyunnu
 const bcrypt = require('bcryptjs')
 
@@ -50,12 +52,12 @@ const register = async (req, res) => {
         )
 
         // token cookie-il save cheyyunnu
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+      res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+})
 
         // register success response return cheyyunnu
         return res.status(201).json({
@@ -86,10 +88,16 @@ const login = async (req, res) => {
         // email use cheyth user database-il search cheyyunnu
         const user = await User.findOne({ email })
 
+
+
+
         // user illenkil error response return cheyyunnu
         if (!user) {
             return res.status(404).json({ msg: "user not found" })
         }
+
+        console.log("LOGIN USER =", user);
+console.log("LOGIN USER ID =", user._id);
 
         // user login cheythal token create cheyyunnu
         const token = jwt.sign(
@@ -133,18 +141,27 @@ const profile = async (req, res) => {
 
     try {
 
+  console.log("REQ USER =", req.user);
+    console.log("USER ID =", req.user.id);
+console.log("USER ID TYPE =", typeof req.user.id);
+ 
+const allUsers = await User.find();
+console.log("ALL USERS =", allUsers);
+
         // token-il ninn kittiya user id use cheyth user fetch cheyyunnu
-        const user = await User.findById(req.user.id)
+ const user = await User.findById(
+  new mongoose.Types.ObjectId(req.user.id)
+);
 
         // fetched user console-il display cheyyunnu
-        console.log(user)
+       console.log("DB USER =", user);
 
         // profile data response return cheyyunnu
         res.status(202).json({ msg: "profile data", user })
     }
 
     catch (err) {
-
+ console.log("PROFILE ERROR =", err);
         // profile fetch failed response return cheyyunnu
         res.status(502).json({ msg: "profile Failed" })
     }

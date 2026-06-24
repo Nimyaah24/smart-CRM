@@ -11,7 +11,7 @@ const connectDB = async () => {
     try {
 
         // .env-il store cheytha MONGO_URL use cheyth mongodb connect cheyyunnu
-        await mongoose.connect(process.env.MONGO_URL)
+await mongoose.connect(process.env.MONGO_URL)
 
         // mongodb connect success message print cheyyunnu
         console.log("mongodb connected successfully");

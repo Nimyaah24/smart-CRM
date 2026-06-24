@@ -11,6 +11,8 @@ import {
   Bell
 } from "lucide-react";
 
+import axios from "axios";
+
 const Sidebar = ({ darkMode }) => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
 const [user, setUser] = useState(null);
@@ -51,22 +53,38 @@ const handlePayment = async () => {
   console.log("Dark Mode =", darkMode);
   const navigate = useNavigate();
 
-  useEffect(() => {
+useEffect(() => {
   const getProfile = async () => {
     try {
-      const res = await fetch(
-        "https://smart-crm-pcys.onrender.com/api/user/profile",
-        {
-          credentials: "include",
-        }
-      );
+      const token = localStorage.getItem("token");
 
-      const data = await res.json();
+      console.log("TOKEN =", token);
 
-      setUser(data.user);
+console.log("HEADER =", {
+  Authorization: `Bearer ${token}`
+});
+
+    const res = await axios.get(
+  "https://smart-crm-pcys.onrender.com/api/user/profile",
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
+
+const data = res.data;
+
+console.log("PROFILE DATA =", data);
+
+if (data.user) {
+  setUser(data.user);
+}
+
     } catch (err) {
       console.log(err);
     }
+    
   };
 
   getProfile();
@@ -373,7 +391,7 @@ style={{
     color: darkMode ? "white" : "#0f172a"
   }}
 >
-          {user?.name || "Loading..."}
+        {user ? user.name : "Loading..."}
           </h6>
 
           <p
@@ -464,7 +482,7 @@ style={{
   )
 }
 
-
+ 
     </div>
   );
 };

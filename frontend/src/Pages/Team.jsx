@@ -936,6 +936,11 @@ onClick={() => {
                             {/* BUTTON */}
 
                            <button
+                             style={{
+    color: darkMode ? "#cbd5e1" : "#475569",
+    background: "transparent",
+    border: "none"
+  }}
  className="btn w-100 mt-4"
  onClick={() => {
 
