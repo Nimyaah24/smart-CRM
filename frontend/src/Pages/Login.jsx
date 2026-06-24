@@ -88,20 +88,38 @@ console.log(
     return (
 
         // main container
-        <div className="container-fluid" style={{ minHeight: "100vh", backgroundColor: "#f4f7fb", position: "relative", overflow: "hidden" }}>
+        <div className="container-fluid" style={{  width: "100vw", margin: 0,
+    padding: 0,
+    height: "100vh", backgroundColor: "#f4f7fb", position: "relative", overflow: "hidden" }}>
 
-            {/* outline square */}
-            <div style={{ position: "absolute", top: "278px", left: "315px", width: "100px", height: "100px", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", transform: "rotate(25deg)", zIndex: "1" }} ></div>
+      
 
             {/* row */}
             <div className="row min-vh-100">
 
                 {/* left side */}
-                <div className="col-lg-6 d-none d-lg-flex flex-column justify-content-center px-5" style={{ background: "linear-gradient(to right,#0f172a,#1e293b)", color: "white", position: "relative" }} >
+                <div className="col-lg-6 d-none d-lg-flex flex-column justify-content-center px-5" style={{ background: "linear-gradient(to right,#0f172a,#1e293b)", color: "white", position: "relative", }} >
 
-                    <h1 className="fw-bold display-4 mb-4" style={{ zIndex: "2" }} >  Smart CRM</h1>
+     
+       {/* outline square */}
+<div
+  style={{
+    position: "absolute",
+    top: "37%",
+    left: "31%",
+    width: "100px",
+    height: "100px",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "20px",
+    transform: "rotate(25deg)",
+    zIndex: "1"
+  }}
+></div>
 
-                    <p className="fs-5 text-light" style={{ zIndex: "2", maxWidth: "500px" }} > Manage customers, track activities, organize workflow and improve productivity with a modern CRM</p>
+
+                    <h1 className="fw-bold display-4 mb-5" style={{ zIndex: "2" }} >  Smart CRM</h1>
+
+                    <p className="fs-5 text-light" style={{ zIndex: "2", maxWidth: "600px" }} > Manage customers, track activities, organize workflow and improve productivity with a modern CRM platform.</p>
 
                 </div>
 

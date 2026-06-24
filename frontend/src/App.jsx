@@ -11,6 +11,7 @@ import Kanban from './Pages/Kanban'
 import Team from './Pages/Team'
 import Settings from './Pages/Settings'
 import Notifications from './Pages/Notifications'
+import ForgotPassword from './Pages/Forgotpassword'
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
           <Route path='/team' element={<Team />} />
           <Route path='/settings' element={<Settings />} />
           <Route path='/notifications' element={<Notifications />} />
-
+<Route path="/forgotpassword" element={<ForgotPassword/>}/>
 
 
         </Routes>

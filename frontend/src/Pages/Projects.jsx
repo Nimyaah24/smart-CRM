@@ -636,7 +636,7 @@ const totalBudget = projects.reduce(
                   {item.title}
                 </h4>
 
-                <p
+                <p className="mt-4"
                   style={{
                     color: darkMode
                       ? "#cbd5e1"
@@ -646,7 +646,7 @@ const totalBudget = projects.reduce(
                   Budget : {item.budget}
                 </p>
 
-                <p
+                <p className=""
                   style={{
                     color: darkMode
                       ? "#cbd5e1"

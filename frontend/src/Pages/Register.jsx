@@ -59,7 +59,9 @@ const [showPassword, setShowPassword] = useState(false)
     return (
 
         // main container
-        <div className="container-fluid d-flex justify-content-center align-items-center position-relative overflow-hidden" style={{ minHeight: "100vh", background: "#f4f7fb" }}>
+        <div className="container-fluid d-flex justify-content-center align-items-center position-relative overflow-hidden" style={{ width: "100vw", margin: 0,
+    padding: 0,
+    height: "100vh",  background: "#f4f7fb" }}>
 
             {/* background blur circle */}
             <div style={{ position: "absolute", width: "300px", height: "300px", background: "#0f172a10", borderRadius: "50%", top: "-100px", left: "-100px", filter: "blur(60px)" }}></div>
@@ -82,7 +84,7 @@ const [showPassword, setShowPassword] = useState(false)
                         <h1 className="fw-bold" style={{ fontSize: "58px", lineHeight: "70px" }}>Smart CRM</h1>
 
                         {/* subtitle */}
-                        <p className="mt-4" style={{ fontSize: "18px", color: "#d1d5db", lineHeight: "32px" }}> Manage customers, organize workflow and improve productivity with a modern CRM platform.</p>
+                        <p className="mt-4" style={{ fontSize: "18px", color: "#d1d5db", lineHeight: "32px" }}>  Create your account and start managing customers, tasks and business operations with Smart CRM.</p>
 
                     </div>
 
