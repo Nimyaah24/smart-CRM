@@ -65,9 +65,7 @@ localStorage.getItem(
 )
 ) || [];
 
-setNotifications(
-savedNotifications
-);
+setNotifications(savedNotifications);
 
 setTodo(
 JSON.parse(localStorage.getItem("todo")) || []
@@ -80,7 +78,6 @@ JSON.parse(localStorage.getItem("progress")) || []
 setCompleted(
 JSON.parse(localStorage.getItem("completed")) || []
 );
-
 
 
 fetch(
@@ -104,7 +101,16 @@ data.projects || []
 );
 
 
+ fetch(
+  "https://smart-crm-pcys.onrender.com/api/task/all"
+  )
+  .then(res => res.json())
+  .then(data =>
+  setTasks(data.tasks || [])
+  );
+
 }, []);
+
 
 
 const totalTasks =
@@ -290,11 +296,12 @@ n => n.unread
 
           <div className="col-md-3">
             <div className="p-4" style={cardStyle}>
-              <h6 style={{ color: "#64748b" }}>
-                Tasks
-              </h6>
-             <h2 className="fw-bold">
-{tasks.length}
+    <h6 style={{ color: "#64748b" }}>
+  Tasks
+</h6>
+
+<h2 className="fw-bold">
+  {totalTasks}
 </h2>
             </div>
           </div>
@@ -310,7 +317,7 @@ projects
 .reduce(
 (acc,p)=>
 acc +
-Number(
+parseFloat(
 p.budget || 0
 ),
 0
@@ -451,7 +458,7 @@ background: "#22c55e",
           <div className="col-lg-4">
             <div className="p-4" style={cardStyle}>
               <h5 className="fw-bold">
-                Ongoing Projects
+                In Progress
               </h5>
              <h1
   className="fw-bold"
@@ -461,9 +468,9 @@ background: "#22c55e",
   }}
 >
   {
-    projects.filter(
-      p => p.status === "Ongoing"
-    ).length
+   projects.filter(
+  p => p.status === "In Progress"
+).length
   }
 </h1>
             </div>
@@ -491,25 +498,28 @@ p => p.status === "Completed"
           </div>
 
           <div className="col-lg-4">
-            <div className="p-4" style={cardStyle}>
-              <h5 className="fw-bold">
-                Pending Tasks
-              </h5>
-              <h1
-                className="fw-bold"
-                style={{
-                  color: "#f59e0b",
-                  fontSize: "55px",
-                }}
-              >
-               {
-tasks.filter(
-t => t.status !== "Completed"
-).length
-}
-              </h1>
-            </div>
-          </div>
+  <div className="p-4" style={cardStyle}>
+    <h5 className="fw-bold">
+      Pending 
+    </h5>
+
+    <h1
+      className="fw-bold"
+      style={{
+        color: "#f59e0b",
+        fontSize: "55px",
+      }}
+    >
+      {
+        projects.filter(
+          p => p.status === "Pending"
+        ).length
+      }
+    </h1>
+
+  </div>
+</div>
+
         </div>
       </div>
     </div>

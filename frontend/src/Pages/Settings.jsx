@@ -176,18 +176,39 @@ const [showNewPassword,setShowNewPassword] = useState(false)
 const [showConfirmPassword,setShowConfirmPassword] = useState(false)
 
     // seeings load
-    useEffect(() => {
+useEffect(() => {
 
-const savedSettings =
-JSON.parse(
+const loggedUser = JSON.parse(
+localStorage.getItem("user")
+)
+
+console.log(
+  "USER FROM STORAGE =",
+  localStorage.getItem("user")
+)
+
+console.log(
+  "PARSED USER =",
+  loggedUser
+)
+
+if(loggedUser){
+
+setName(loggedUser.name || "")
+setEmail(loggedUser.email || "")
+setPassword(loggedUser.password || "")
+
+}
+
+const savedSettings = JSON.parse(
 localStorage.getItem("settings")
 )
 
 if(savedSettings){
 
-setName(savedSettings.name)
-setEmail(savedSettings.email)
-setPassword(savedSettings.password)
+setName(savedSettings.name || "")
+setEmail(savedSettings.email || "")
+setPassword(savedSettings.password || "")
 
 }
 
@@ -231,11 +252,32 @@ const reader = new FileReader()
 
 reader.onloadend = () => {
 
-setProfileImage(reader.result)
+const imageData = reader.result
+
+setProfileImage(imageData)
 
 localStorage.setItem(
 "profileImage",
-reader.result
+imageData
+)
+
+// user update
+const user =
+JSON.parse(
+localStorage.getItem("user")
+) || {}
+
+localStorage.setItem(
+"user",
+JSON.stringify({
+...user,
+profileImage:imageData
+})
+)
+
+// sidebar refresh event
+window.dispatchEvent(
+new Event("profileUpdated")
 )
 
 }
@@ -938,10 +980,15 @@ gap:"20px"
 }}
 >
 
+<div style={{ position: "relative" }}>
+
 <img
 src={
-profileImage ||
-"https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff"
+profileImage
+? profileImage
+: `https://ui-avatars.com/api/?name=${
+    name || "User"
+  }&background=2563eb&color=fff`
 }
 alt="profile"
 style={{
@@ -952,6 +999,55 @@ objectFit:"cover",
 border:"3px solid #3b82f6"
 }}
 />
+
+{profileImage && (
+<button
+type="button"
+onClick={() => {
+
+setProfileImage("")
+
+localStorage.removeItem("profileImage")
+
+const user =
+JSON.parse(
+localStorage.getItem("user")
+) || {}
+
+localStorage.setItem(
+"user",
+JSON.stringify({
+...user,
+profileImage:""
+})
+)
+
+window.dispatchEvent(
+new Event("profileUpdated")
+)
+
+toast.success("Profile image removed")
+
+}}
+style={{
+position:"absolute",
+top:"-5px",
+right:"-5px",
+width:"28px",
+height:"28px",
+borderRadius:"50%",
+border:"none",
+background:"#ef4444",
+color:"white",
+fontWeight:"bold",
+cursor:"pointer"
+}}
+>
+×
+</button>
+)}
+
+</div>
 
 <div>
 
@@ -1318,6 +1414,17 @@ localStorage.setItem(
   })
 )
 
+// get login details on settings
+localStorage.setItem(
+  "user",
+  JSON.stringify({
+    name,
+    email,
+    password,
+    profileImage
+  })
+)
+
 toast.success("Settings Saved Successfully")
 
 }}
@@ -1592,6 +1699,19 @@ return
 }
 
 setPassword(newPassword)
+
+const user = JSON.parse(
+  localStorage.getItem("user")
+)
+
+localStorage.setItem(
+  "user",
+  JSON.stringify({
+    ...user,
+    password: newPassword
+  })
+)
+
 
 localStorage.setItem(
 "settings",

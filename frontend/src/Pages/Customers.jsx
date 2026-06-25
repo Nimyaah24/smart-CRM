@@ -35,12 +35,15 @@ useEffect(() => {
 
   const [search, setSearch] = useState("");
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-  });
+const [form, setForm] = useState({
+  name: "",
+  email: "",
+  phone: "",
+  location: "",
+  photo: "",
+});
+
+const [photoPreview, setPhotoPreview] = useState("");
 
   const [editId, setEditId] = useState(null);
 
@@ -177,12 +180,13 @@ fetchCustomers();
   const editCustomer = (item) => {
   setEditId(item._id);
 
-  setForm({
-    name: item.name,
-    email: item.email,
-    phone: item.phone,
-    location: item.location,
-  });
+setForm({
+  name: item.name,
+  email: item.email,
+  phone: item.phone,
+  location: item.location,
+  photo: item.photo || "",
+});
 
   setShowModal(true);
 };
@@ -575,20 +579,37 @@ setForm({
 
               <div className="d-flex justify-content-between align-items-center">
                 <div
-                  className="d-flex justify-content-center align-items-center"
-                  style={{
-                    width: "70px",
-                    height: "70px",
-                    borderRadius: "50%",
-                    background:
-                      "linear-gradient(to right,#2563eb,#3b82f6)",
-                    color: "white",
-                    fontSize: "28px",
-                    fontWeight: "700",
-                  }}
-                >
-                  {item?.name?.charAt(0) || "U"}
-                </div>
+  className="d-flex justify-content-center align-items-center overflow-hidden"
+  style={{
+    width: "70px",
+    height: "70px",
+    borderRadius: "50%",
+    background:
+      "linear-gradient(to right,#2563eb,#3b82f6)",
+    color: "white",
+    fontSize: "22px",
+    fontWeight: "700",
+  }}
+>
+  {item.photo ? (
+    <img
+      src={item.photo}
+      alt={item.name}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+      }}
+    />
+  ) : (
+    item?.name
+      ?.split(" ")
+      .map(word => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase()
+  )}
+</div>
 
                 <div className="d-flex gap-2">
                   <button
@@ -729,8 +750,73 @@ setForm({
           Add Customer
         </h3>
 
-        <div className="row">
+<div className="text-center mb-4">
+
+  {photoPreview ? (
+    <>
+      <img
+        src={photoPreview}
+        alt="preview"
+        style={{
+          width: "120px",
+          height: "120px",
+          borderRadius: "50%",
+          objectFit: "cover",
+          border: "3px solid #2563eb",
+        }}
+      />
+
+      <div>
+        <button
+          type="button"
+          className="btn  btn-sm mt-3"
+          style={{ background:
+      darkMode ? "#1e293b" : "#f8fafc",
+    color:
+      darkMode ? "white" : "#0f172a"}}
+          onClick={() => {
+            setPhotoPreview("");
+
+            setForm({
+              ...form,
+              photo: "",
+            });
+          }}
+        >
+          Remove Photo
+        </button>
+      </div>
+    </>
+  ) : (
+    <div
+      className="d-flex justify-content-center align-items-center mx-auto"
+      style={{
+        width: "120px",
+        height: "120px",
+        borderRadius: "50%",
+        background:
+          "linear-gradient(135deg,#2563eb,#3b82f6)",
+        color: "white",
+        fontSize: "40px",
+        fontWeight: "700",
+      }}
+    >
+      {form.name
+        ? form.name
+            .split(" ")
+            .map((word) => word[0])
+            .join("")
+            .slice(0, 2)
+            .toUpperCase()
+        : "CU"}
+    </div>
+  )}
+
+</div>
+
+<div className="row">
           <div className="col-md-6 mb-3">
+
            <input
   type="text"
   name="name"
@@ -801,6 +887,38 @@ setForm({
   }}
             />
           </div>
+
+          <div className="col-md-12 mb-3">
+
+  <input
+    type="file"
+    accept="image/*"
+    className="form-control"
+    onChange={(e) => {
+      const file = e.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          setPhotoPreview(reader.result);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    }}
+       style={{
+      background: darkMode ? "#1e293b" : "white",
+      color: darkMode ? "white" : "#0f172a",
+      border: darkMode
+        ? "1px solid #334155"
+        : "1px solid #d1d5db"
+    }}
+  />
+
+</div>
+
+
         </div> 
 
    <button
@@ -831,6 +949,8 @@ setForm({
     
   )
 }
+
+
 
 
     </div>

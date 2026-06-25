@@ -17,6 +17,79 @@ const Sidebar = ({ darkMode }) => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
 const [user, setUser] = useState(null);
 
+const [sidebarImage, setSidebarImage] = useState("");
+
+useEffect(() => {
+
+const savedUser =
+JSON.parse(localStorage.getItem("user"));
+
+if(savedUser?.profileImage){
+setSidebarImage(savedUser.profileImage);
+}
+
+}, []);
+
+useEffect(() => {
+
+const updateProfile = () => {
+
+const storedUser =
+JSON.parse(
+localStorage.getItem("user")
+);
+
+if(storedUser){
+setUser(storedUser);
+}
+
+};
+
+updateProfile();
+
+window.addEventListener(
+"profileUpdated",
+updateProfile
+);
+
+return () => {
+
+window.removeEventListener(
+"profileUpdated",
+updateProfile
+);
+
+};
+
+}, []);
+
+
+useEffect(() => {
+
+const updateProfile = () => {
+
+const savedUser =
+JSON.parse(localStorage.getItem("user"));
+
+setSidebarImage(
+savedUser?.profileImage || ""
+);
+
+};
+
+window.addEventListener(
+"profileUpdated",
+updateProfile
+);
+
+return () =>
+window.removeEventListener(
+"profileUpdated",
+updateProfile
+);
+
+}, []);
+
 const handlePayment = async () => {
    
   const res = await fetch(
@@ -78,7 +151,18 @@ const data = res.data;
 console.log("PROFILE DATA =", data);
 
 if (data.user) {
-  setUser(data.user);
+
+const localUser =
+JSON.parse(localStorage.getItem("user")) || {};
+
+setUser({
+...data.user,
+profileImage:
+localUser.profileImage ||
+data.user.profileImage ||
+""
+});
+
 }
 
     } catch (err) {
@@ -89,6 +173,8 @@ if (data.user) {
 
   getProfile();
 }, []);
+
+
 
 
   const handleLogout = async () => {
@@ -148,7 +234,8 @@ if (data.user) {
                                 "linear-gradient(to right,#2563eb,#3b82f6)",
 
                             boxShadow:
-                                "0 10px 25px rgba(37,99,235,0.4)"
+                                "0 10px 25px rgba(37,99,235,0.4)",
+                                cursor:"pointer"
 
                         }}
                     >
@@ -371,18 +458,50 @@ style={{
   borderRadius: "20px",
 }}
       >
-       <img
-  src={
-    user?.profileImage ||
-    `https://ui-avatars.com/api/?name=${user?.name || "User"}`
-  }
-  alt="profile"
-  style={{
-    width: "55px",
-    height: "55px",
-    borderRadius: "50%",
-  }}
+{
+sidebarImage ? (
+
+<img
+src={sidebarImage}
+alt="profile"
+style={{
+width:"55px",
+height:"55px",
+borderRadius:"50%",
+objectFit:"cover"
+}}
 />
+
+) : (
+
+<div
+style={{
+width:"55px",
+height:"55px",
+borderRadius:"50%",
+background:"#2563eb",
+color:"white",
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+fontWeight:"700",
+fontSize:"18px"
+}}
+>
+{
+user?.name
+? user.name
+    .split(" ")
+    .map(word => word[0])
+    .slice(0,2)
+    .join("")
+    .toUpperCase()
+: "U"
+}
+</div>
+
+)
+}
 
         <div>
          <h6

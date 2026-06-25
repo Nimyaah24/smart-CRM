@@ -644,7 +644,7 @@ const completedPercentage =
   </span>
 
   <div className="d-flex gap-3">
-    <Trash2
+    <Trash2 
       size={18}
       color="red"
       style={{ cursor: "pointer" }}

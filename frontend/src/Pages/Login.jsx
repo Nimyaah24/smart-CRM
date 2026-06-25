@@ -54,26 +54,46 @@ const Login = () => {
 
             // email, password indon nokunu
             const res = await loginUser(form)
+console.log("FULL LOGIN RESPONSE =", res)
+console.log("USER =", res.user)
+console.log("TOKEN =", res.token)
 
-console.log("LOGIN RESPONSE =", res);
+if (res.success) {
 
-            if (res.success) {
-                   localStorage.setItem("token", res.token);
-                toast.success("Login Success", { autoClose: 1000, style: { background: "white", border: "2px solid green", color: "#111827" } })
+  localStorage.setItem("token", res.token);
 
-console.log("TOKEN SAVE =", res.token);
+ localStorage.setItem(
+  "user",
+  JSON.stringify({
+    name: res.user?.name || "",
+    email: res.user?.email || "",
+    password: form.password,
+    profileImage: res.user?.profileImage || ""
+  })
+);
+console.log(
+  "AFTER SAVE USER =",
+  localStorage.getItem("user")
+)
 
-localStorage.setItem("token", res.token);
+  console.log(
+    "USER IN STORAGE =",
+    localStorage.getItem("user")
+  );
+
+  toast.success("Login Success", {
+    autoClose: 1000
+  });
+
+  navigate("/dashboard");
+
+  return;
+}
 
 console.log(
-  "LOCAL TOKEN =",
-  localStorage.getItem("token")
+  "USER IN STORAGE =",
+  localStorage.getItem("user")
 );
-
-                navigate("/dashboard")
-            }
-            // success
-
 
 
         }
