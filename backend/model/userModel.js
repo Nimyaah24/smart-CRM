@@ -24,6 +24,11 @@ password: {
 },
 
 // email verification OTP store cheyyan field create cheyyunnu
+securityPin: {
+    type: String,
+    required: true
+},
+
 otp: {
     type: String
 },

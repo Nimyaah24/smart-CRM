@@ -12,8 +12,11 @@ const Register = () => {
     // input states
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("")
+const [securityPin, setSecurityPin] = useState("")
 const [showPassword, setShowPassword] = useState(false)
+const [showPin, setShowPin] = useState(false)
+
     // REGISTER FUNCTION
     const handleSubmit = async (e) => {
 
@@ -21,7 +24,12 @@ const [showPassword, setShowPassword] = useState(false)
         e.preventDefault()
 
         // frontend data object
-        const data = { name, email, password }
+       const data = {
+  name,
+  email,
+  password,
+  securityPin
+}
 
         try {
             // backend api call
@@ -158,6 +166,46 @@ const [showPassword, setShowPassword] = useState(false)
   </span>
 
 </div>
+
+{/* Security PIN */}
+<div className="mb-4 position-relative">
+
+  <input
+    type={showPin ? "text" : "password"}
+    maxLength={4}
+    autoComplete="off"
+    className="form-control form-control-lg border-0 shadow-sm"
+    placeholder="4 Digit Security PIN"
+    value={securityPin}
+    onChange={(e) => setSecurityPin(e.target.value)}
+    style={{
+      background: "#f8fafc",
+      borderRadius: "16px",
+      padding: "16px",
+      paddingRight: "50px"
+    }}
+  />
+
+  <span
+    onClick={() => setShowPin(!showPin)}
+    style={{
+      position: "absolute",
+      right: "18px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      cursor: "pointer",
+      color: "#64748b"
+    }}
+  >
+    {showPin ? (
+      <EyeOff size={20} />
+    ) : (
+      <Eye size={20} />
+    )}
+  </span>
+
+</div>
+
 
                             {/* submit button */}
                             <button type="submit" className="btn w-100 text-white fw-bold py-3" style={{ background: "linear-gradient(to right,#0f172a,#1e293b)", borderRadius: "16px", fontSize: "18px", border: "none", boxShadow: "0 10px 20px rgba(15,23,42,0.2)" }} > Create Account </button>

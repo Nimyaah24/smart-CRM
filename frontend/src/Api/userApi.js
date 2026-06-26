@@ -17,8 +17,15 @@ export const registerUser = async (data) => {
     body: JSON.stringify(data),
   });
 
+const result = await res.json();
+
+console.log(result);
+
+return result;
+
+
   // response JSON aayi return cheyyunnu
-  return res.json();
+ 
 };
 
 // user login cheyyan login API function create cheyyunnu
@@ -37,3 +44,20 @@ export const loginUser = async (data) => {
   // response JSON aayi return cheyyunnu
   return res.json();
 };
+
+
+
+export const forgotPassword = async (data) => {
+
+  const res = await fetch(`${baseURL}/forgotpassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
+};
+

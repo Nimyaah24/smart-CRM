@@ -15,10 +15,10 @@ const register = async (req, res) => {
     try {
 
         // frontend-il ninn name email password edukunnu
-        const { name, email, password } = req.body
+        const { name, email, password, securityPin } = req.body
 
         // empty fields undo enn check cheyyunnu
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !securityPin) {
             return res.status(400).json({
                 msg: "All fields required"
             })
@@ -35,14 +35,16 @@ const register = async (req, res) => {
         }
 
         // password secure aakkan hash cheyyunnu
-        const hashedPassword = await bcrypt.hash(password, 10)
+        const hashedPassword = await bcrypt.hash(password,10)
+const hashedPin = await bcrypt.hash(securityPin,10)
 
         // new user database-il create cheyyunnu
-        const data = await User.create({
-            name,
-            email,
-            password: hashedPassword
-        })
+       const data = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    securityPin: hashedPin
+})
 
         // authentication token create cheyyunnu
         const token = jwt.sign(
@@ -234,40 +236,66 @@ const deleteUsers = async (req, res) => {
 }
 
 // forgot password functionality handle cheyyan function create cheyyunnu
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req,res)=>{
 
-    try {
+try{
 
-        // frontend-il ninn emailum new passwordum edukunnu
-        const { email, newPassword } = req.body
+const {email, securityPin, newPassword} = req.body
 
-        // email use cheyth user find cheyyunnu
-        const user = await User.findOne({ email })
+const user = await User.findOne({email})
 
-        // user illenkil error response return cheyyunnu
-        if (!user) {
-            return res.status(402).json({ msg: "user not found" })
-        }
+const pinMatch = await bcrypt.compare(
+    securityPin,
+    user.securityPin
+)
 
-        // new password hash cheyyunnu
-        const hashedPassword = await bcrypt.hash(newPassword, 10)
+if(!pinMatch){
+    return res.status(400).json({
+        msg:"Invalid Security PIN"
+    })
+}
 
-        // hashed password user-il assign cheyyunnu
-        user.password = hashedPassword
+if(!user){
+    return res.status(404).json({
+        msg:"User not found"
+    })
+}
 
-        // updated password database-il save cheyyunnu
-        await user.save()
+const match = await bcrypt.compare(
+    securityPin,
+    user.securityPin
+)
 
-        // password update success response return cheyyunnu
-        res.status(202).json({ msg: "password updated successfully" })
+if(!match){
+    return res.status(400).json({
+        msg:"Invalid Security PIN"
+    })
+}
 
-    }
+const hashedPassword = await bcrypt.hash(
+    newPassword,
+    10
+)
 
-    catch (err) {
+user.password = hashedPassword
 
-        // forgot password failed response return cheyyunnu
-        res.status(502).json({ msg: "forgot password failed" })
-    }
+await user.save()
+
+return res.status(200).json({
+    msg:"Password Updated Successfully"
+})
+
+}
+
+catch(err){
+
+console.log(err)
+
+return res.status(500).json({
+    msg:"Forgot Password Failed"
+})
+
+}
 
 }
 

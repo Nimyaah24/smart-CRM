@@ -2,27 +2,51 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
-
+import { forgotPassword } from "../Api/userApi";
 
 const ForgotPassword = () => {
 
-      const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+const [showPin, setShowPin] = useState(false);
+
+const [email, setEmail] = useState("");
+const [newPassword, setNewPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
+const [securityPin, setSecurityPin] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
+   try {
 
-      // API call ivide add cheyyam
+if (newPassword !== confirmPassword) {
 
-      toast.success("Password Updated Successfully");
+toast.error("Passwords do not match");
 
-    } catch (err) {
-      console.log(err);
-      toast.error("Failed to Update Password");
-    }
+return;
+
+}
+
+  const data = {
+    email,
+    securityPin,
+    newPassword
+  };
+
+const res = await forgotPassword(data);
+
+if (res.msg === "password updated successfully") {
+  toast.success(res.msg);
+} else {
+  toast.error(res.msg);
+}
+
+} catch (err) {
+  console.log(err);
+  toast.error("Failed to Update Password");
+}
   };
 
   return (
@@ -128,6 +152,45 @@ const ForgotPassword = () => {
 
             </div>
 
+
+<div className="mb-3">
+
+  <label className="form-label fw-semibold">
+    4 Digit Security PIN
+  </label>
+
+<div className="position-relative">
+
+<input
+type={showPin ? "text" : "password"}
+maxLength={4}
+className="form-control form-control-lg"
+placeholder="Enter 4 digit PIN"
+value={securityPin}
+onChange={(e)=>setSecurityPin(e.target.value)}
+/>
+
+<button
+type="button"
+onClick={()=>setShowPin(!showPin)}
+style={{
+position:"absolute",
+right:"15px",
+top:"50%",
+transform:"translateY(-50%)",
+border:"none",
+background:"transparent",
+color:" #7e7e7f"
+}}
+>
+{showPin ? <EyeOff size={20}/> : <Eye size={20}/>}
+</button>
+
+</div>
+
+</div>
+
+
             {/* NEW PASSWORD */}
             <div className="mb-4">
 
@@ -168,6 +231,46 @@ const ForgotPassword = () => {
 
 </div>
             </div>
+
+
+
+{/* UPDATE PASS */}
+<div className="mb-4">
+
+<label className="form-label fw-semibold">
+Re-enter Password
+</label>
+
+<div className="position-relative">
+
+<input
+type={showConfirmPassword ? "text" : "password"}
+className="form-control form-control-lg"
+placeholder="Re-enter Password"
+value={confirmPassword}
+onChange={(e)=>setConfirmPassword(e.target.value)}
+/>
+
+<button
+type="button"
+onClick={()=>setShowConfirmPassword(!showConfirmPassword)}
+style={{
+position:"absolute",
+right:"15px",
+top:"50%",
+transform:"translateY(-50%)",
+border:"none",
+background:"transparent",
+cursor:"pointer",
+color:"#7e7e7f"
+}}
+>
+{showConfirmPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
+</button>
+
+</div>
+
+</div>
 
             <button
               type="submit"
